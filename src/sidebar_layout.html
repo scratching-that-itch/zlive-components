@@ -1,0 +1,64 @@
+@zig {
+const Sidebar = @import("sidebar.zig");
+const SiteHeader = @import("site_header.zig");
+const Provider = @import("sidebar_provider.zig");
+
+pub const Side = Provider.Side;
+pub const Variant = Provider.Variant;
+
+/// Where the page header sits. `inset`: inside the content column, next to
+/// the sidebar (sidebar-07). `full`: a full-width bar above both, the way
+/// sidebar-16 puts its SiteHeader.
+pub const HeaderPlacement = enum {
+    inset,
+    full,
+
+    pub fn tag(self: HeaderPlacement) []const u8 {
+        return @tagName(self);
+    }
+
+    pub fn fromTag(value: []const u8) ?HeaderPlacement {
+        if (std.mem.eql(u8, value, "inset")) return .inset;
+        if (std.mem.eql(u8, value, "full")) return .full;
+        return null;
+    }
+};
+}
+@props {
+    /// Is the sidebar open? The whole layout — gap, width, labels, sub-menus,
+    /// the rail, the header height — is CSS off this one attribute.
+    open: bool = true,
+    side: Side = .left,
+    variant: Variant = .sidebar,
+    /// `mini`: collapsing leaves the 3rem icon rail (shadcn's
+    /// `collapsible="icon"`). False hides the sidebar instead
+    /// (`collapsible="offcanvas"`).
+    mini: bool = true,
+    /// Where the header lives (see HeaderPlacement).
+    header_placement: HeaderPlacement = .inset,
+    /// The inset header stays at the top while the page scrolls. A
+    /// full-width header is always sticky — it is what offsets the sidebar.
+    sticky_header: bool = false,
+    /// The header bar's contents.
+    header: []const Segment,
+    /// The sidebar's inner content (header, groups, footer, rail).
+    sidebar: []const Segment,
+    /// The page content, below the header.
+    content: []const Segment,
+    class: ?[]const u8 = null,
+}
+<div class="zc-sidebar-wrapper{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-wrapper" data-lv-hook="zc-sidebar" data-state="{if (props.open) "expanded" else "collapsed"}" data-side="{props.side.tag()}" data-variant="{props.variant.tag()}" data-collapsible="{if (props.mini) "icon" else "offcanvas"}" data-header="{props.header_placement.tag()}">
+<button type="button" class="zc-sidebar-scrim" data-slot="sidebar-scrim" aria-label="Close sidebar" data-lv-click="zc:sidebar:toggle"></button>
+@if (props.header_placement == .full) {
+@SiteHeader(.{ .sticky = true, .children = props.header })
+}
+<div class="zc-sidebar-body" data-slot="sidebar-body">
+@Sidebar(.{ .children = props.sidebar })
+<main class="zc-sidebar-inset" data-slot="sidebar-inset">
+@if (props.header_placement == .inset) {
+@SiteHeader(.{ .sticky = props.sticky_header, .children = props.header })
+}
+@children (props.content)
+</main>
+</div>
+</div>

@@ -1,0 +1,32 @@
+@zig {
+pub const Gap = enum {
+    none,
+    sm,
+    md,
+    lg,
+
+    pub fn tag(self: Gap) []const u8 {
+        return @tagName(self);
+    }
+};
+
+pub const Justify = enum {
+    start,
+    between,
+    end,
+
+    pub fn tag(self: Justify) []const u8 {
+        return @tagName(self);
+    }
+};
+}
+@props {
+    /// Horizontal group that wraps onto the next line when it runs out of
+    /// room — the toolbar/button-row primitive.
+    gap: Gap = .sm,
+    justify: Justify = .start,
+    children: []const Segment,
+}
+<div class="zc-cluster zc-gap-{props.gap.tag()} zc-justify-{props.justify.tag()}">
+@children
+</div>

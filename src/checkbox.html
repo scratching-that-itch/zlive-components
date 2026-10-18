@@ -1,0 +1,7 @@
+@props {
+    id: []const u8,
+    label: []const u8,
+    checked: bool = false,
+    error_msg: ?[]const u8 = null,
+}
+<input type="checkbox" id="{props.id}" name="{props.id}"{if (props.checked) " checked" else ""} data-lv-change="input"><label for="{props.id}">{props.label}</label><span class="error" id="{props.id}-error">{props.error_msg orelse ""}</span>

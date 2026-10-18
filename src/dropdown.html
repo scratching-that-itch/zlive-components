@@ -1,0 +1,28 @@
+@zig {
+const DropdownPanel = @import("dropdown_panel.zig");
+const Button = @import("button.zig");
+
+pub const Item = DropdownPanel.Item;
+pub const Variant = DropdownPanel.Variant;
+pub const Kind = DropdownPanel.Kind;
+pub const Size = Button.Size;
+pub const TriggerVariant = Button.Variant;
+}
+@props {
+    id: []const u8,
+    label: []const u8,
+    open: bool,
+    items: []const Item,
+    placement: []const u8 = "bottom-start",
+    /// The trigger is a Button (shadcn: DropdownMenuTrigger wraps one), so
+    /// it takes the same variant/size props. `outline` is shadcn's default
+    /// look for a dropdown trigger.
+    variant: TriggerVariant = .outline,
+    size: Size = .@"default",
+    /// Which submenu is open, if any (see DropdownPanel.open_sub).
+    open_sub: ?[]const u8 = null,
+}
+@Button(.{ .label = props.label, .id = props.id, .variant = props.variant, .size = props.size, .on_click = "zc:dropdown:toggle", .value = props.id, .aria_expanded = props.open })
+@if (props.open) {
+@DropdownPanel(.{ .id = props.id, .items = props.items, .placement = props.placement, .open_sub = props.open_sub })
+}

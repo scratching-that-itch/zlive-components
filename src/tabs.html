@@ -1,0 +1,26 @@
+@zig {
+pub const Tab = struct {
+    key: []const u8,
+    label: []const u8,
+    content: []const Segment,
+};
+
+fn activeContent(tabs: []const Tab, active: []const u8) []const Segment {
+    for (tabs) |tab| {
+        if (std.mem.eql(u8, tab.key, active)) return tab.content;
+    }
+    return &.{};
+}
+}
+@props {
+    id: []const u8,
+    tabs: []const Tab,
+    active: []const u8,
+}
+<div class="zc-tabs" id="{props.id}"><div class="zc-tabs-header" role="tablist">
+@for (props.tabs) |tab| {
+<button type="button" role="tab" id="{props.id}-tab-{tab.key}" data-lv-click="switch_tab" data-lv-value="{tab.key}"{if (std.mem.eql(u8, tab.key, props.active)) " active" else ""}>{tab.label}</button>
+}
+</div><div class="zc-tab-panel" role="tabpanel" id="{props.id}-panel">
+@children (activeContent(props.tabs, props.active))
+</div></div>

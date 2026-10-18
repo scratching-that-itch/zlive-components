@@ -1,0 +1,24 @@
+@zig {
+pub const Orientation = enum { horizontal, vertical };
+}
+@props {
+    /// Spacer that separates two pieces of content.
+    ///
+    /// Horizontal is the default (a rule between stacked blocks); vertical
+    /// stretches to its flex row's height, for separating toolbar items.
+    orientation: Orientation = .horizontal,
+    /// Optional centered label, rendered like a section divider.
+    label: ?[]const u8 = null,
+    /// Extra classes — the page header sizes its vertical rule (shadcn:
+    /// `data-[orientation=vertical]:h-4`).
+    class: ?[]const u8 = null,
+}
+@if (props.orientation == .vertical) {
+<div class="zc-sep zc-sep-vertical{if (props.class != null) " " else ""}{props.class orelse ""}" role="separator" aria-orientation="vertical"></div>
+} @else {
+<div class="zc-sep{if (props.class != null) " " else ""}{props.class orelse ""}" role="separator" aria-orientation="horizontal">
+@if (props.label) |l| {
+<span>{l}</span>
+}
+</div>
+}

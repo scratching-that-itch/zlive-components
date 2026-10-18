@@ -1,0 +1,27 @@
+@zig {
+const Icon = @import("icon.zig");
+
+pub const Item = struct {
+    label: []const u8,
+    href: []const u8,
+};
+}
+@props {
+    /// The ancestors, in order, each a link. shadcn composes
+    /// BreadcrumbItem/Link/Page/Separator by hand; one component with a
+    /// trail is the same markup for the one case a page header needs.
+    trail: []const Item,
+    /// The current page: never a link, marked `aria-current`.
+    page: []const u8,
+    class: ?[]const u8 = null,
+}
+<nav class="zc-breadcrumb{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="breadcrumb" aria-label="breadcrumb">
+<ol class="zc-breadcrumb-list" data-slot="breadcrumb-list">
+@for (props.trail) |item| {
+<li class="zc-breadcrumb-item" data-slot="breadcrumb-item"><a class="zc-breadcrumb-link" data-slot="breadcrumb-link" href="{item.href}">{item.label}</a>
+@Icon(.{ .name = .chevron_right, .class = "zc-breadcrumb-separator" })
+</li>
+}
+<li class="zc-breadcrumb-item" data-slot="breadcrumb-item"><span class="zc-breadcrumb-page" data-slot="breadcrumb-page" aria-current="page">{props.page}</span></li>
+</ol>
+</nav>

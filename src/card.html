@@ -1,0 +1,54 @@
+@zig {
+/// shadcn/ui Card sizes: `default` and `sm` (the compact card).
+pub const Size = enum {
+    @"default",
+    sm,
+
+    pub fn tag(self: Size) []const u8 {
+        return @tagName(self);
+    }
+};
+}
+@props {
+    /// Optional card heading. Null renders no header at all.
+    title: ?[]const u8 = null,
+    description: ?[]const u8 = null,
+    /// Header action slot (shadcn's CardAction): the node that sits in the
+    /// header's second column, top-right — typically an icon Button.
+    action: ?[]const Segment = null,
+    /// Body content.
+    children: []const Segment,
+    /// Optional footer band, separated from the body by a border.
+    footer: ?[]const Segment = null,
+    /// Element id, for CSS or hooks that target this card.
+    id: ?[]const u8 = null,
+    /// Marks the card as an ARIA live region, so a card whose contents the
+    /// server re-renders (a detail panel) is announced when it changes.
+    live: bool = false,
+    size: Size = .@"default",
+}
+<div class="zc-card" data-slot="card" data-size="{props.size.tag()}"{if (props.id != null) " id=\"" else ""}{props.id orelse ""}{if (props.id != null) "\"" else ""}{if (props.live) " aria-live=\"polite\"" else ""}>
+@if (props.title != null or props.description != null or props.action != null) {
+<div class="zc-card-header" data-slot="card-header">
+@if (props.title) |t| {
+<div class="zc-card-title" data-slot="card-title">{t}</div>
+}
+@if (props.description) |d| {
+<div class="zc-card-desc" data-slot="card-description">{d}</div>
+}
+@if (props.action) |acts| {
+<div class="zc-card-action" data-slot="card-action">
+@children (acts)
+</div>
+}
+</div>
+}
+<div class="zc-card-content" data-slot="card-content">
+@children
+</div>
+@if (props.footer) |f| {
+<div class="zc-card-footer" data-slot="card-footer">
+@children (f)
+</div>
+}
+</div>

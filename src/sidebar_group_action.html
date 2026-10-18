@@ -1,0 +1,13 @@
+@zig {
+const Icon = @import("icon.zig");
+}
+@props {
+    name: Icon.Name = .plus,
+    event: []const u8,
+    value: ?[]const u8 = null,
+    label: []const u8 = "Add",
+    class: ?[]const u8 = null,
+}
+<button type="button" class="zc-sidebar-group-action{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-group-action" data-sidebar="group-action" data-lv-click="{props.event}"{if (props.value != null) " data-lv-value=\"" else ""}{props.value orelse ""}{if (props.value != null) "\"" else ""} aria-label="{props.label}" title="{props.label}">
+@Icon(.{ .name = props.name })
+</button>

@@ -1,0 +1,14 @@
+@zig {
+pub const Option_ = struct { value: []const u8, label: []const u8 };
+}
+@props {
+    id: []const u8,
+    options: []const Option_,
+    value: []const u8 = "",
+    error_msg: ?[]const u8 = null,
+}
+<select id="{props.id}" name="{props.id}" data-lv-change="input">
+@for (props.options) |opt| {
+<option value="{opt.value}"{if (opt.value.len != 0 and std.mem.eql(u8, opt.value, props.value)) " selected" else ""}>{opt.label}</option>
+}
+</select>

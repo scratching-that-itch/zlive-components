@@ -1,0 +1,7 @@
+@props {
+    id: []const u8,
+    value: []const u8 = "",
+    placeholder: []const u8 = "",
+    error_msg: ?[]const u8 = null,
+}
+<input type="text" id="{props.id}" name="{props.id}" value="{props.value}" placeholder="{props.placeholder}" data-lv-change="input"><span class="error" id="{props.id}-error">{props.error_msg orelse ""}</span>

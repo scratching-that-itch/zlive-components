@@ -1,0 +1,15 @@
+@props {
+    /// Stays at the top of the page while it scrolls (shadcn's sidebar-16
+    /// `SiteHeader`: `sticky top-0 z-50 … bg-background`).
+    sticky: bool = false,
+    class: ?[]const u8 = null,
+    /// The bar's contents — the trigger, a separator, the breadcrumb and the
+    /// page's own actions. The header owns the frame (height, rule,
+    /// background, stickiness); the page owns what sits in it.
+    children: []const Segment,
+}
+<header class="zc-site-header{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="site-header" data-sticky="{if (props.sticky) "true" else "false"}">
+<div class="zc-site-header-bar" data-slot="site-header-bar">
+@children
+</div>
+</header>

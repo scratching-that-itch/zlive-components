@@ -1,0 +1,8 @@
+@zig {
+const Button = @import("button.zig");
+}
+@props {
+    label: []const u8,
+    loading: bool = false,
+}
+@Button(.{ .label = if (props.loading) "Saving…" else props.label, .submit = true, .disabled = props.loading })

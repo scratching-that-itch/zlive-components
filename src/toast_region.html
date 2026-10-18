@@ -1,0 +1,43 @@
+@zig {
+/// Where the region pins itself. Four corners, as named in the request;
+/// adding a centred one is one enum field plus one CSS rule.
+pub const Corner = enum {
+    top_left,
+    top_right,
+    bottom_left,
+    bottom_right,
+
+    /// The rendered value of data-corner: "top-left", ...
+    pub fn tag(self: Corner) []const u8 {
+        return switch (self) {
+            .top_left => "top-left",
+            .top_right => "top-right",
+            .bottom_left => "bottom-left",
+            .bottom_right => "bottom-right",
+        };
+    }
+
+    /// Parses a data-corner value back to a Corner — the server needs this
+    /// when a click carries the corner as its value.
+    pub fn fromTag(value: []const u8) ?Corner {
+        if (std.mem.eql(u8, value, "top-left")) return .top_left;
+        if (std.mem.eql(u8, value, "top-right")) return .top_right;
+        if (std.mem.eql(u8, value, "bottom-left")) return .bottom_left;
+        if (std.mem.eql(u8, value, "bottom-right")) return .bottom_right;
+        return null;
+    }
+};
+}
+@props {
+    /// Which corner the toasts pop over. Server state: changing it is one
+    /// patch on the region's data-corner slot.
+    corner: Corner = .bottom_right,
+    /// The toasts, oldest first. A slot, so showing one is a child patch
+    /// inside the region and dismissing one is that child going back to
+    /// empty — the region itself stays put, which is what lets CSS position
+    /// it once and animate each toast as it is inserted.
+    children: []const Segment,
+}
+<div class="zc-toast-region" data-slot="toast-region" data-corner="{props.corner.tag()}">
+@children
+</div>

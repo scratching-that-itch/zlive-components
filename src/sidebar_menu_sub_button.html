@@ -1,0 +1,51 @@
+@zig {
+const Icon = @import("icon.zig");
+
+/// shadcn's sub-row scale.
+pub const Size = enum {
+    sm,
+    md,
+
+    pub fn tag(self: Size) []const u8 {
+        return @tagName(self);
+    }
+};
+}
+@props {
+    id: ?[]const u8 = null,
+    label: []const u8 = "",
+    icon: ?Icon.Name = null,
+    size: Size = .md,
+    active: bool = false,
+    href: ?[]const u8 = null,
+    event: ?[]const u8 = null,
+    value: ?[]const u8 = null,
+    title: ?[]const u8 = null,
+    children: ?[]const Segment = null,
+    class: ?[]const u8 = null,
+}
+@if (props.href) |h| {
+<a href="{h}" class="zc-sidebar-menu-sub-button{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-menu-sub-button" data-sidebar="menu-sub-button" data-size="{props.size.tag()}" data-active="{if (props.active) "true" else "false"}"
+{if (props.id != null) " id=\"" else ""}{props.id orelse ""}{if (props.id != null) "\"" else ""}{if (props.event != null) " data-lv-click=\"" else ""}{props.event orelse ""}{if (props.event != null) "\"" else ""}{if (props.value != null) " data-lv-value=\"" else ""}{props.value orelse ""}{if (props.value != null) "\"" else ""}{if (props.title != null) " title=\"" else ""}{props.title orelse ""}{if (props.title != null) "\"" else ""}>
+@if (props.children) |kids| {
+@children (kids)
+} @else {
+@if (props.icon) |ic| {
+@Icon(.{ .name = ic })
+}
+<span class="zc-sidebar-menu-label">{props.label}</span>
+}
+</a>
+} @else {
+<button type="button" class="zc-sidebar-menu-sub-button{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-menu-sub-button" data-sidebar="menu-sub-button" data-size="{props.size.tag()}" data-active="{if (props.active) "true" else "false"}"
+{if (props.id != null) " id=\"" else ""}{props.id orelse ""}{if (props.id != null) "\"" else ""}{if (props.event != null) " data-lv-click=\"" else ""}{props.event orelse ""}{if (props.event != null) "\"" else ""}{if (props.value != null) " data-lv-value=\"" else ""}{props.value orelse ""}{if (props.value != null) "\"" else ""}{if (props.title != null) " title=\"" else ""}{props.title orelse ""}{if (props.title != null) "\"" else ""}>
+@if (props.children) |kids| {
+@children (kids)
+} @else {
+@if (props.icon) |ic| {
+@Icon(.{ .name = ic })
+}
+<span class="zc-sidebar-menu-label">{props.label}</span>
+}
+</button>
+}

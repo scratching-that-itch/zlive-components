@@ -1,0 +1,17 @@
+.{
+    .name = .zlive_components,
+    .version = "0.1.0",
+    .minimum_zig_version = "0.17.0",
+    .fingerprint = 0xae4ad22694ca2849,
+    .dependencies = .{
+        .zlive = .{ .path = "../zlive" },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+        "COMPONENTS.md",
+        "README.md",
+        "LICENSE",
+    },
+}

@@ -1,0 +1,8 @@
+@props {
+    id: []const u8,
+    submitting: bool = false,
+    children: []const Segment,
+}
+<form id="{props.id}"{if (props.submitting) " data-submitting" else ""}>
+@children
+</form>

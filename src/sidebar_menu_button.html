@@ -1,0 +1,87 @@
+@zig {
+const Icon = @import("icon.zig");
+
+/// Row height/density, matching shadcn's scale.
+pub const Size = enum {
+    sm,
+    @"default",
+    lg,
+
+    pub fn tag(self: Size) []const u8 {
+        return @tagName(self);
+    }
+};
+
+/// `outline` is shadcn's secondary look — a row that reads as a button.
+pub const Variant = enum {
+    @"default",
+    outline,
+
+    pub fn tag(self: Variant) []const u8 {
+        return @tagName(self);
+    }
+};
+}
+@props {
+    /// The row's element id. Only needed when something addresses the row —
+    /// a dropdown panel anchoring to it, mostly.
+    id: ?[]const u8 = null,
+    /// The row's text. Ignored when `children` is given.
+    label: []const u8 = "",
+    icon: ?Icon.Name = null,
+    size: Size = .@"default",
+    variant: Variant = .@"default",
+    /// The current row in the nav: one attribute, so a nav move patches two
+    /// values and nothing else.
+    active: bool = false,
+    /// Renders the disclosure chevron (a nav item with sub-items); the
+    /// rotation is CSS off the enclosing menu item's `data-state`.
+    chevron: bool = false,
+    /// An `<a>` instead of a `<button>` when set.
+    href: ?[]const u8 = null,
+    /// The click event the row sends, and its value.
+    event: ?[]const u8 = null,
+    value: ?[]const u8 = null,
+    /// `aria-expanded`, for a disclosure trigger.
+    expanded: ?bool = null,
+    /// Native tooltip. shadcn renders a floating Tooltip here when the
+    /// sidebar is collapsed to icons; that costs one Tooltip per row and a
+    /// client hook per hover, so icon-only mode uses the browser's own.
+    title: ?[]const u8 = null,
+    /// Custom row content — what shadcn gets from `asChild` children (the
+    /// team switcher's logo box, the user row's two-line name/email). When
+    /// null the row is icon + label + chevron.
+    children: ?[]const Segment = null,
+    class: ?[]const u8 = null,
+}
+@if (props.href) |h| {
+<a href="{h}" class="zc-sidebar-menu-button{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-menu-button" data-sidebar="menu-button" data-size="{props.size.tag()}" data-variant="{props.variant.tag()}" data-active="{if (props.active) "true" else "false"}"
+{if (props.id != null) " id=\"" else ""}{props.id orelse ""}{if (props.id != null) "\"" else ""}{if (props.event != null) " data-lv-click=\"" else ""}{props.event orelse ""}{if (props.event != null) "\"" else ""}{if (props.value != null) " data-lv-value=\"" else ""}{props.value orelse ""}{if (props.value != null) "\"" else ""}{if (props.title != null) " title=\"" else ""}{props.title orelse ""}{if (props.title != null) "\"" else ""}{if (props.expanded != null) " aria-expanded=\"" else ""}{if (props.expanded) |e| if (e) "true" else "false" else ""}{if (props.expanded != null) "\"" else ""}>
+@if (props.children) |kids| {
+@children (kids)
+} @else {
+@if (props.icon) |ic| {
+@Icon(.{ .name = ic })
+}
+<span class="zc-sidebar-menu-label">{props.label}</span>
+@if (props.chevron) {
+@Icon(.{ .name = .chevron_right, .class = "zc-sidebar-chevron" })
+}
+}
+</a>
+} @else {
+<button type="button" class="zc-sidebar-menu-button{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-menu-button" data-sidebar="menu-button" data-size="{props.size.tag()}" data-variant="{props.variant.tag()}" data-active="{if (props.active) "true" else "false"}"
+{if (props.id != null) " id=\"" else ""}{props.id orelse ""}{if (props.id != null) "\"" else ""}{if (props.event != null) " data-lv-click=\"" else ""}{props.event orelse ""}{if (props.event != null) "\"" else ""}{if (props.value != null) " data-lv-value=\"" else ""}{props.value orelse ""}{if (props.value != null) "\"" else ""}{if (props.title != null) " title=\"" else ""}{props.title orelse ""}{if (props.title != null) "\"" else ""}{if (props.expanded != null) " aria-expanded=\"" else ""}{if (props.expanded) |e| if (e) "true" else "false" else ""}{if (props.expanded != null) "\"" else ""}>
+@if (props.children) |kids| {
+@children (kids)
+} @else {
+@if (props.icon) |ic| {
+@Icon(.{ .name = ic })
+}
+<span class="zc-sidebar-menu-label">{props.label}</span>
+@if (props.chevron) {
+@Icon(.{ .name = .chevron_right, .class = "zc-sidebar-chevron" })
+}
+}
+</button>
+}

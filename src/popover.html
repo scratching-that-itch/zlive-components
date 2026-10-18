@@ -1,0 +1,13 @@
+@props {
+    id: []const u8,
+    label: []const u8,
+    open: bool,
+    children: []const Segment,
+    placement: []const u8 = "bottom",
+}
+<button type="button" class="zc-popover-trigger" id="{props.id}" data-lv-click="zc:popover:toggle" data-lv-value="{props.id}" aria-expanded="{if (props.open) "true" else "false"}">{props.label}</button>
+@if (props.open) {
+<div class="zc-popover" id="{props.id}-panel" data-lv-hook="zc-popover" data-zc-anchor="{props.id}" data-zc-placement="{props.placement}">
+@children
+</div>
+}

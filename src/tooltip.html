@@ -1,0 +1,7 @@
+@props {
+    /// id of the element the tooltip describes (the anchor)
+    anchor: []const u8,
+    text: []const u8,
+    placement: []const u8 = "top",
+}
+<div class="zc-tooltip" id="{props.anchor}-tip" data-lv-hook="zc-tooltip" data-zc-anchor="{props.anchor}" data-zc-placement="{props.placement}" data-zc-offset="0" role="tooltip" hidden>{props.text}</div>

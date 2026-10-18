@@ -1,0 +1,21 @@
+@zig {
+pub const Width = enum {
+    /// Narrow reading column (prose, forms, single-column demos).
+    prose,
+    /// The default page width.
+    page,
+    /// Full-bleed: no max width, no centering.
+    full,
+
+    pub fn tag(self: Width) []const u8 {
+        return @tagName(self);
+    }
+};
+}
+@props {
+    width: Width = .page,
+    children: []const Segment,
+}
+<div class="zc-container zc-container-{props.width.tag()}">
+@children
+</div>

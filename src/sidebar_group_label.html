@@ -1,0 +1,7 @@
+@props {
+    class: ?[]const u8 = null,
+    children: []const Segment,
+}
+<div class="zc-sidebar-group-label{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-group-label" data-sidebar="group-label">
+@children
+</div>

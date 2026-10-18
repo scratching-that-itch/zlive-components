@@ -1,0 +1,9 @@
+@props {
+    id: []const u8,
+    value: []const u8 = "",
+    placeholder: []const u8 = "",
+    /// The change event the field sends (see TextInput).
+    event: []const u8 = "input",
+    class: ?[]const u8 = null,
+}
+<input type="text" class="zc-sidebar-input{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-input" data-sidebar="input" id="{props.id}" name="{props.id}" value="{props.value}" placeholder="{props.placeholder}" data-lv-change="{props.event}">

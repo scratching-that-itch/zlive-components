@@ -1,0 +1,1825 @@
+/* ziggy shared demo stylesheet - every page loads this so the same
+ * components render the same way everywhere.
+ *
+ * Theming: the design tokens are shadcn/ui's (v4, oklch) under the same
+ * names — --background, --foreground, --primary, --secondary, --muted,
+ * --accent, --destructive, --card, --popover, --border, --input, --ring,
+ * --radius, the --chart-* ramp and the --sidebar-* set — so the component
+ * rules below read like shadcn's Tailwind classes and a palette can be
+ * swapped by changing which theme block applies.
+ *
+ * Every shadcn theme is generated below (scripts/gen_themes.py): seven base
+ * colors on `data-base` and seventeen accent themes on `data-accent`. Dark
+ * mode is the `data-theme="dark"` attribute on <html> (see pages/theme.js)
+ * rather than shadcn's `.dark` class. Both attributes work on any element,
+ * not just <html>, so a subtree can carry its own palette.
+ */
+
+/* Radii: shadcn derives them from --radius inside its `@theme inline` block,
+   and --radius is part of every theme (all of shadcn's use 0.625rem). Custom
+   properties are substituted where they are declared, so these four are
+   declared once on :root and inherited as computed values: a nested theme
+   that wanted a different radius would have to restate them. */
+:root {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Shadows: Tailwind v4's default scale, which is what shadcn's utilities
+     (shadow-xs/sm/md/lg) resolve to. */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Demo-only semantic colours (the protocol log). Not shadcn tokens and not
+     per theme: they only have a light and a dark form. */
+  --ok: oklch(0.55 0.15 150);
+  --hook: oklch(0.6 0.12 70);
+}
+:root[data-theme="dark"] {
+  --ok: oklch(0.75 0.16 150);
+  --hook: oklch(0.78 0.13 75);
+}
+
+/* shadcn's themes, generated from the registry (see scripts/gen_themes.py).
+ *
+ * Composition, mirroring shadcn's own model:
+ *   [data-base="<base>"]     one of the seven base colors; it carries the
+ *                           whole token set. `neutral` is also the :root
+ *                           default, so an unthemed page looks like shadcn.
+ *   [data-accent="<accent>"] an accent theme; it overrides only primary,
+ *                           secondary, the chart ramp and sidebar-primary,
+ *                           layering on whatever base is active.
+ *   [data-theme="dark"]      the mode, on <html> (see pages/theme.js).
+ *
+ * Both attributes work on any element, not just <html>, which is how the
+ * /themes page previews every palette at once: a wrapper gets the base
+ * tokens, and under a dark root the descendant selectors swap in the dark
+ * values. Accent blocks come last so that, at equal specificity, an accent
+ * wins over the base it layers on.
+ */
+/* source: shadcn-ui/ui apps/v4/registry/themes.ts, git blob 80fdfba3a7d0dc2cb8ebe6234a608778b2ed8c07
+ * 24 themes: 7 base colors, 17 accents */
+/* @themes:begin */
+
+/* --- light ------------------------------------------------------- */
+
+/* the default (neutral) also sits on :root */
+:root,
+[data-base="neutral"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.97 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+[data-base="stone"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.147 0.004 49.25);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.147 0.004 49.25);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.147 0.004 49.25);
+  --primary: oklch(0.216 0.006 56.043);
+  --primary-foreground: oklch(0.985 0.001 106.423);
+  --secondary: oklch(0.97 0.001 106.424);
+  --secondary-foreground: oklch(0.216 0.006 56.043);
+  --muted: oklch(0.97 0.001 106.424);
+  --muted-foreground: oklch(0.553 0.013 58.071);
+  --accent: oklch(0.97 0.001 106.424);
+  --accent-foreground: oklch(0.216 0.006 56.043);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.923 0.003 48.717);
+  --input: oklch(0.923 0.003 48.717);
+  --ring: oklch(0.709 0.01 56.259);
+  --chart-1: oklch(0.869 0.005 56.366);
+  --chart-2: oklch(0.553 0.013 58.071);
+  --chart-3: oklch(0.444 0.011 73.639);
+  --chart-4: oklch(0.374 0.01 67.558);
+  --chart-5: oklch(0.268 0.007 34.298);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0.001 106.423);
+  --sidebar-foreground: oklch(0.147 0.004 49.25);
+  --sidebar-primary: oklch(0.216 0.006 56.043);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.97 0.001 106.424);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
+  --sidebar-border: oklch(0.923 0.003 48.717);
+  --sidebar-ring: oklch(0.709 0.01 56.259);
+}
+
+[data-base="zinc"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  --primary: oklch(0.21 0.006 285.885);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.705 0.015 286.067);
+  --chart-1: oklch(0.871 0.006 286.286);
+  --chart-2: oklch(0.552 0.016 285.938);
+  --chart-3: oklch(0.442 0.017 285.786);
+  --chart-4: oklch(0.37 0.013 285.805);
+  --chart-5: oklch(0.274 0.006 286.033);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.141 0.005 285.823);
+  --sidebar-primary: oklch(0.21 0.006 285.885);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.967 0.001 286.375);
+  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
+  --sidebar-border: oklch(0.92 0.004 286.32);
+  --sidebar-ring: oklch(0.705 0.015 286.067);
+}
+
+[data-base="mauve"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0.008 326);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0.008 326);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0.008 326);
+  --primary: oklch(0.212 0.019 322.12);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.96 0.003 325.6);
+  --secondary-foreground: oklch(0.212 0.019 322.12);
+  --muted: oklch(0.96 0.003 325.6);
+  --muted-foreground: oklch(0.542 0.034 322.5);
+  --accent: oklch(0.96 0.003 325.6);
+  --accent-foreground: oklch(0.212 0.019 322.12);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0.005 325.62);
+  --input: oklch(0.922 0.005 325.62);
+  --ring: oklch(0.711 0.019 323.02);
+  --chart-1: oklch(0.865 0.012 325.68);
+  --chart-2: oklch(0.542 0.034 322.5);
+  --chart-3: oklch(0.435 0.029 321.78);
+  --chart-4: oklch(0.364 0.029 323.89);
+  --chart-5: oklch(0.263 0.024 320.12);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0.008 326);
+  --sidebar-primary: oklch(0.212 0.019 322.12);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.96 0.003 325.6);
+  --sidebar-accent-foreground: oklch(0.212 0.019 322.12);
+  --sidebar-border: oklch(0.922 0.005 325.62);
+  --sidebar-ring: oklch(0.711 0.019 323.02);
+}
+
+[data-base="olive"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.153 0.006 107.1);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.153 0.006 107.1);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.153 0.006 107.1);
+  --primary: oklch(0.228 0.013 107.4);
+  --primary-foreground: oklch(0.988 0.003 106.5);
+  --secondary: oklch(0.966 0.005 106.5);
+  --secondary-foreground: oklch(0.228 0.013 107.4);
+  --muted: oklch(0.966 0.005 106.5);
+  --muted-foreground: oklch(0.58 0.031 107.3);
+  --accent: oklch(0.966 0.005 106.5);
+  --accent-foreground: oklch(0.228 0.013 107.4);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.93 0.007 106.5);
+  --input: oklch(0.93 0.007 106.5);
+  --ring: oklch(0.737 0.021 106.9);
+  --chart-1: oklch(0.88 0.011 106.6);
+  --chart-2: oklch(0.58 0.031 107.3);
+  --chart-3: oklch(0.466 0.025 107.3);
+  --chart-4: oklch(0.394 0.023 107.4);
+  --chart-5: oklch(0.286 0.016 107.4);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.988 0.003 106.5);
+  --sidebar-foreground: oklch(0.153 0.006 107.1);
+  --sidebar-primary: oklch(0.228 0.013 107.4);
+  --sidebar-primary-foreground: oklch(0.988 0.003 106.5);
+  --sidebar-accent: oklch(0.966 0.005 106.5);
+  --sidebar-accent-foreground: oklch(0.228 0.013 107.4);
+  --sidebar-border: oklch(0.93 0.007 106.5);
+  --sidebar-ring: oklch(0.737 0.021 106.9);
+}
+
+[data-base="mist"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.148 0.004 228.8);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.148 0.004 228.8);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.148 0.004 228.8);
+  --primary: oklch(0.218 0.008 223.9);
+  --primary-foreground: oklch(0.987 0.002 197.1);
+  --secondary: oklch(0.963 0.002 197.1);
+  --secondary-foreground: oklch(0.218 0.008 223.9);
+  --muted: oklch(0.963 0.002 197.1);
+  --muted-foreground: oklch(0.56 0.021 213.5);
+  --accent: oklch(0.963 0.002 197.1);
+  --accent-foreground: oklch(0.218 0.008 223.9);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.925 0.005 214.3);
+  --input: oklch(0.925 0.005 214.3);
+  --ring: oklch(0.723 0.014 214.4);
+  --chart-1: oklch(0.872 0.007 219.6);
+  --chart-2: oklch(0.56 0.021 213.5);
+  --chart-3: oklch(0.45 0.017 213.2);
+  --chart-4: oklch(0.378 0.015 216);
+  --chart-5: oklch(0.275 0.011 216.9);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.987 0.002 197.1);
+  --sidebar-foreground: oklch(0.148 0.004 228.8);
+  --sidebar-primary: oklch(0.218 0.008 223.9);
+  --sidebar-primary-foreground: oklch(0.987 0.002 197.1);
+  --sidebar-accent: oklch(0.963 0.002 197.1);
+  --sidebar-accent-foreground: oklch(0.218 0.008 223.9);
+  --sidebar-border: oklch(0.925 0.005 214.3);
+  --sidebar-ring: oklch(0.723 0.014 214.4);
+}
+
+[data-base="taupe"] {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.147 0.004 49.3);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.147 0.004 49.3);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.147 0.004 49.3);
+  --primary: oklch(0.214 0.009 43.1);
+  --primary-foreground: oklch(0.986 0.002 67.8);
+  --secondary: oklch(0.96 0.002 17.2);
+  --secondary-foreground: oklch(0.214 0.009 43.1);
+  --muted: oklch(0.96 0.002 17.2);
+  --muted-foreground: oklch(0.547 0.021 43.1);
+  --accent: oklch(0.96 0.002 17.2);
+  --accent-foreground: oklch(0.214 0.009 43.1);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0.005 34.3);
+  --input: oklch(0.922 0.005 34.3);
+  --ring: oklch(0.714 0.014 41.2);
+  --chart-1: oklch(0.868 0.007 39.5);
+  --chart-2: oklch(0.547 0.021 43.1);
+  --chart-3: oklch(0.438 0.017 39.3);
+  --chart-4: oklch(0.367 0.016 35.7);
+  --chart-5: oklch(0.268 0.011 36.5);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.986 0.002 67.8);
+  --sidebar-foreground: oklch(0.147 0.004 49.3);
+  --sidebar-primary: oklch(0.214 0.009 43.1);
+  --sidebar-primary-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-accent: oklch(0.96 0.002 17.2);
+  --sidebar-accent-foreground: oklch(0.214 0.009 43.1);
+  --sidebar-border: oklch(0.922 0.005 34.3);
+  --sidebar-ring: oklch(0.714 0.014 41.2);
+}
+
+[data-accent="amber"] {
+  --primary: oklch(0.555 0.163 48.998);
+  --primary-foreground: oklch(0.987 0.022 95.277);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.879 0.169 91.605);
+  --chart-2: oklch(0.769 0.188 70.08);
+  --chart-3: oklch(0.666 0.179 58.318);
+  --chart-4: oklch(0.555 0.163 48.998);
+  --chart-5: oklch(0.473 0.137 46.201);
+  --sidebar-primary: oklch(0.666 0.179 58.318);
+  --sidebar-primary-foreground: oklch(0.987 0.022 95.277);
+}
+
+[data-accent="blue"] {
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar-primary: oklch(0.546 0.245 262.881);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+}
+
+[data-accent="cyan"] {
+  --primary: oklch(0.52 0.105 223.128);
+  --primary-foreground: oklch(0.984 0.019 200.873);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.865 0.127 207.078);
+  --chart-2: oklch(0.715 0.143 215.221);
+  --chart-3: oklch(0.609 0.126 221.723);
+  --chart-4: oklch(0.52 0.105 223.128);
+  --chart-5: oklch(0.45 0.085 224.283);
+  --sidebar-primary: oklch(0.609 0.126 221.723);
+  --sidebar-primary-foreground: oklch(0.984 0.019 200.873);
+}
+
+[data-accent="emerald"] {
+  --primary: oklch(0.508 0.118 165.612);
+  --primary-foreground: oklch(0.979 0.021 166.113);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.845 0.143 164.978);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.596 0.145 163.225);
+  --chart-4: oklch(0.508 0.118 165.612);
+  --chart-5: oklch(0.432 0.095 166.913);
+  --sidebar-primary: oklch(0.596 0.145 163.225);
+  --sidebar-primary-foreground: oklch(0.979 0.021 166.113);
+}
+
+[data-accent="fuchsia"] {
+  --primary: oklch(0.518 0.253 323.949);
+  --primary-foreground: oklch(0.977 0.017 320.058);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.833 0.145 321.434);
+  --chart-2: oklch(0.667 0.295 322.15);
+  --chart-3: oklch(0.591 0.293 322.896);
+  --chart-4: oklch(0.518 0.253 323.949);
+  --chart-5: oklch(0.452 0.211 324.591);
+  --sidebar-primary: oklch(0.591 0.293 322.896);
+  --sidebar-primary-foreground: oklch(0.977 0.017 320.058);
+}
+
+[data-accent="green"] {
+  --primary: oklch(0.527 0.154 150.069);
+  --primary-foreground: oklch(0.982 0.018 155.826);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.871 0.15 154.449);
+  --chart-2: oklch(0.723 0.219 149.579);
+  --chart-3: oklch(0.627 0.194 149.214);
+  --chart-4: oklch(0.527 0.154 150.069);
+  --chart-5: oklch(0.448 0.119 151.328);
+  --sidebar-primary: oklch(0.627 0.194 149.214);
+  --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+}
+
+[data-accent="indigo"] {
+  --primary: oklch(0.457 0.24 277.023);
+  --primary-foreground: oklch(0.962 0.018 272.314);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.785 0.115 274.713);
+  --chart-2: oklch(0.585 0.233 277.117);
+  --chart-3: oklch(0.511 0.262 276.966);
+  --chart-4: oklch(0.457 0.24 277.023);
+  --chart-5: oklch(0.398 0.195 277.366);
+  --sidebar-primary: oklch(0.511 0.262 276.966);
+  --sidebar-primary-foreground: oklch(0.962 0.018 272.314);
+}
+
+[data-accent="lime"] {
+  --primary: oklch(0.841 0.238 128.85);
+  --primary-foreground: oklch(0.405 0.101 131.063);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.897 0.196 126.665);
+  --chart-2: oklch(0.768 0.233 130.85);
+  --chart-3: oklch(0.648 0.2 131.684);
+  --chart-4: oklch(0.532 0.157 131.589);
+  --chart-5: oklch(0.453 0.124 130.933);
+  --sidebar-primary: oklch(0.648 0.2 131.684);
+  --sidebar-primary-foreground: oklch(0.986 0.031 120.757);
+}
+
+[data-accent="orange"] {
+  --primary: oklch(0.553 0.195 38.402);
+  --primary-foreground: oklch(0.98 0.016 73.684);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.837 0.128 66.29);
+  --chart-2: oklch(0.705 0.213 47.604);
+  --chart-3: oklch(0.646 0.222 41.116);
+  --chart-4: oklch(0.553 0.195 38.402);
+  --chart-5: oklch(0.47 0.157 37.304);
+  --sidebar-primary: oklch(0.646 0.222 41.116);
+  --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
+}
+
+[data-accent="pink"] {
+  --primary: oklch(0.525 0.223 3.958);
+  --primary-foreground: oklch(0.971 0.014 343.198);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.823 0.12 346.018);
+  --chart-2: oklch(0.656 0.241 354.308);
+  --chart-3: oklch(0.592 0.249 0.584);
+  --chart-4: oklch(0.525 0.223 3.958);
+  --chart-5: oklch(0.459 0.187 3.815);
+  --sidebar-primary: oklch(0.592 0.249 0.584);
+  --sidebar-primary-foreground: oklch(0.971 0.014 343.198);
+}
+
+[data-accent="purple"] {
+  --primary: oklch(0.496 0.265 301.924);
+  --primary-foreground: oklch(0.977 0.014 308.299);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.827 0.119 306.383);
+  --chart-2: oklch(0.627 0.265 303.9);
+  --chart-3: oklch(0.558 0.288 302.321);
+  --chart-4: oklch(0.496 0.265 301.924);
+  --chart-5: oklch(0.438 0.218 303.724);
+  --sidebar-primary: oklch(0.558 0.288 302.321);
+  --sidebar-primary-foreground: oklch(0.977 0.014 308.299);
+}
+
+[data-accent="red"] {
+  --primary: oklch(0.505 0.213 27.518);
+  --primary-foreground: oklch(0.971 0.013 17.38);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.808 0.114 19.571);
+  --chart-2: oklch(0.637 0.237 25.331);
+  --chart-3: oklch(0.577 0.245 27.325);
+  --chart-4: oklch(0.505 0.213 27.518);
+  --chart-5: oklch(0.444 0.177 26.899);
+  --sidebar-primary: oklch(0.577 0.245 27.325);
+  --sidebar-primary-foreground: oklch(0.971 0.013 17.38);
+}
+
+[data-accent="rose"] {
+  --primary: oklch(0.514 0.222 16.935);
+  --primary-foreground: oklch(0.969 0.015 12.422);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.81 0.117 11.638);
+  --chart-2: oklch(0.645 0.246 16.439);
+  --chart-3: oklch(0.586 0.253 17.585);
+  --chart-4: oklch(0.514 0.222 16.935);
+  --chart-5: oklch(0.455 0.188 13.697);
+  --sidebar-primary: oklch(0.586 0.253 17.585);
+  --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
+}
+
+[data-accent="sky"] {
+  --primary: oklch(0.5 0.134 242.749);
+  --primary-foreground: oklch(0.977 0.013 236.62);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.828 0.111 230.318);
+  --chart-2: oklch(0.685 0.169 237.323);
+  --chart-3: oklch(0.588 0.158 241.966);
+  --chart-4: oklch(0.5 0.134 242.749);
+  --chart-5: oklch(0.443 0.11 240.79);
+  --sidebar-primary: oklch(0.588 0.158 241.966);
+  --sidebar-primary-foreground: oklch(0.977 0.013 236.62);
+}
+
+[data-accent="teal"] {
+  --primary: oklch(0.511 0.096 186.391);
+  --primary-foreground: oklch(0.984 0.014 180.72);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.855 0.138 181.071);
+  --chart-2: oklch(0.704 0.14 182.503);
+  --chart-3: oklch(0.6 0.118 184.704);
+  --chart-4: oklch(0.511 0.096 186.391);
+  --chart-5: oklch(0.437 0.078 188.216);
+  --sidebar-primary: oklch(0.6 0.118 184.704);
+  --sidebar-primary-foreground: oklch(0.984 0.014 180.72);
+}
+
+[data-accent="violet"] {
+  --primary: oklch(0.491 0.27 292.581);
+  --primary-foreground: oklch(0.969 0.016 293.756);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.811 0.111 293.571);
+  --chart-2: oklch(0.606 0.25 292.717);
+  --chart-3: oklch(0.541 0.281 293.009);
+  --chart-4: oklch(0.491 0.27 292.581);
+  --chart-5: oklch(0.432 0.232 292.759);
+  --sidebar-primary: oklch(0.541 0.281 293.009);
+  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
+}
+
+[data-accent="yellow"] {
+  --primary: oklch(0.852 0.199 91.936);
+  --primary-foreground: oklch(0.421 0.095 57.708);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --chart-1: oklch(0.905 0.182 98.111);
+  --chart-2: oklch(0.795 0.184 86.047);
+  --chart-3: oklch(0.681 0.162 75.834);
+  --chart-4: oklch(0.554 0.135 66.442);
+  --chart-5: oklch(0.476 0.114 61.907);
+  --sidebar-primary: oklch(0.681 0.162 75.834);
+  --sidebar-primary-foreground: oklch(0.987 0.026 102.212);
+}
+
+/* --- dark -------------------------------------------------------- */
+
+/* the default (neutral) also sits on :root[data-theme=dark] */
+:root[data-theme="dark"],
+[data-theme="dark"][data-base="neutral"],
+[data-theme="dark"] [data-base="neutral"] {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+[data-theme="dark"][data-base="stone"],
+[data-theme="dark"] [data-base="stone"] {
+  --background: oklch(0.147 0.004 49.25);
+  --foreground: oklch(0.985 0.001 106.423);
+  --card: oklch(0.216 0.006 56.043);
+  --card-foreground: oklch(0.985 0.001 106.423);
+  --popover: oklch(0.216 0.006 56.043);
+  --popover-foreground: oklch(0.985 0.001 106.423);
+  --primary: oklch(0.923 0.003 48.717);
+  --primary-foreground: oklch(0.216 0.006 56.043);
+  --secondary: oklch(0.268 0.007 34.298);
+  --secondary-foreground: oklch(0.985 0.001 106.423);
+  --muted: oklch(0.268 0.007 34.298);
+  --muted-foreground: oklch(0.709 0.01 56.259);
+  --accent: oklch(0.268 0.007 34.298);
+  --accent-foreground: oklch(0.985 0.001 106.423);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.553 0.013 58.071);
+  --chart-1: oklch(0.869 0.005 56.366);
+  --chart-2: oklch(0.553 0.013 58.071);
+  --chart-3: oklch(0.444 0.011 73.639);
+  --chart-4: oklch(0.374 0.01 67.558);
+  --chart-5: oklch(0.268 0.007 34.298);
+  --sidebar: oklch(0.216 0.006 56.043);
+  --sidebar-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-accent: oklch(0.268 0.007 34.298);
+  --sidebar-accent-foreground: oklch(0.985 0.001 106.423);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.553 0.013 58.071);
+}
+
+[data-theme="dark"][data-base="zinc"],
+[data-theme="dark"] [data-base="zinc"] {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.92 0.004 286.32);
+  --primary-foreground: oklch(0.21 0.006 285.885);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.552 0.016 285.938);
+  --chart-1: oklch(0.871 0.006 286.286);
+  --chart-2: oklch(0.552 0.016 285.938);
+  --chart-3: oklch(0.442 0.017 285.786);
+  --chart-4: oklch(0.37 0.013 285.805);
+  --chart-5: oklch(0.274 0.006 286.033);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.274 0.006 286.033);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.552 0.016 285.938);
+}
+
+[data-theme="dark"][data-base="mauve"],
+[data-theme="dark"] [data-base="mauve"] {
+  --background: oklch(0.145 0.008 326);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.212 0.019 322.12);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.212 0.019 322.12);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0.005 325.62);
+  --primary-foreground: oklch(0.212 0.019 322.12);
+  --secondary: oklch(0.263 0.024 320.12);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.263 0.024 320.12);
+  --muted-foreground: oklch(0.711 0.019 323.02);
+  --accent: oklch(0.263 0.024 320.12);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.542 0.034 322.5);
+  --chart-1: oklch(0.865 0.012 325.68);
+  --chart-2: oklch(0.542 0.034 322.5);
+  --chart-3: oklch(0.435 0.029 321.78);
+  --chart-4: oklch(0.364 0.029 323.89);
+  --chart-5: oklch(0.263 0.024 320.12);
+  --sidebar: oklch(0.212 0.019 322.12);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.263 0.024 320.12);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.542 0.034 322.5);
+}
+
+[data-theme="dark"][data-base="olive"],
+[data-theme="dark"] [data-base="olive"] {
+  --background: oklch(0.153 0.006 107.1);
+  --foreground: oklch(0.988 0.003 106.5);
+  --card: oklch(0.228 0.013 107.4);
+  --card-foreground: oklch(0.988 0.003 106.5);
+  --popover: oklch(0.228 0.013 107.4);
+  --popover-foreground: oklch(0.988 0.003 106.5);
+  --primary: oklch(0.93 0.007 106.5);
+  --primary-foreground: oklch(0.228 0.013 107.4);
+  --secondary: oklch(0.286 0.016 107.4);
+  --secondary-foreground: oklch(0.988 0.003 106.5);
+  --muted: oklch(0.286 0.016 107.4);
+  --muted-foreground: oklch(0.737 0.021 106.9);
+  --accent: oklch(0.286 0.016 107.4);
+  --accent-foreground: oklch(0.988 0.003 106.5);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.58 0.031 107.3);
+  --chart-1: oklch(0.88 0.011 106.6);
+  --chart-2: oklch(0.58 0.031 107.3);
+  --chart-3: oklch(0.466 0.025 107.3);
+  --chart-4: oklch(0.394 0.023 107.4);
+  --chart-5: oklch(0.286 0.016 107.4);
+  --sidebar: oklch(0.228 0.013 107.4);
+  --sidebar-foreground: oklch(0.988 0.003 106.5);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.988 0.003 106.5);
+  --sidebar-accent: oklch(0.286 0.016 107.4);
+  --sidebar-accent-foreground: oklch(0.988 0.003 106.5);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.58 0.031 107.3);
+}
+
+[data-theme="dark"][data-base="mist"],
+[data-theme="dark"] [data-base="mist"] {
+  --background: oklch(0.148 0.004 228.8);
+  --foreground: oklch(0.987 0.002 197.1);
+  --card: oklch(0.218 0.008 223.9);
+  --card-foreground: oklch(0.987 0.002 197.1);
+  --popover: oklch(0.218 0.008 223.9);
+  --popover-foreground: oklch(0.987 0.002 197.1);
+  --primary: oklch(0.925 0.005 214.3);
+  --primary-foreground: oklch(0.218 0.008 223.9);
+  --secondary: oklch(0.275 0.011 216.9);
+  --secondary-foreground: oklch(0.987 0.002 197.1);
+  --muted: oklch(0.275 0.011 216.9);
+  --muted-foreground: oklch(0.723 0.014 214.4);
+  --accent: oklch(0.275 0.011 216.9);
+  --accent-foreground: oklch(0.987 0.002 197.1);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.56 0.021 213.5);
+  --chart-1: oklch(0.872 0.007 219.6);
+  --chart-2: oklch(0.56 0.021 213.5);
+  --chart-3: oklch(0.45 0.017 213.2);
+  --chart-4: oklch(0.378 0.015 216);
+  --chart-5: oklch(0.275 0.011 216.9);
+  --sidebar: oklch(0.218 0.008 223.9);
+  --sidebar-foreground: oklch(0.987 0.002 197.1);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.987 0.002 197.1);
+  --sidebar-accent: oklch(0.275 0.011 216.9);
+  --sidebar-accent-foreground: oklch(0.987 0.002 197.1);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.56 0.021 213.5);
+}
+
+[data-theme="dark"][data-base="taupe"],
+[data-theme="dark"] [data-base="taupe"] {
+  --background: oklch(0.147 0.004 49.3);
+  --foreground: oklch(0.986 0.002 67.8);
+  --card: oklch(0.214 0.009 43.1);
+  --card-foreground: oklch(0.986 0.002 67.8);
+  --popover: oklch(0.214 0.009 43.1);
+  --popover-foreground: oklch(0.986 0.002 67.8);
+  --primary: oklch(0.922 0.005 34.3);
+  --primary-foreground: oklch(0.214 0.009 43.1);
+  --secondary: oklch(0.268 0.011 36.5);
+  --secondary-foreground: oklch(0.986 0.002 67.8);
+  --muted: oklch(0.268 0.011 36.5);
+  --muted-foreground: oklch(0.714 0.014 41.2);
+  --accent: oklch(0.268 0.011 36.5);
+  --accent-foreground: oklch(0.986 0.002 67.8);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.547 0.021 43.1);
+  --chart-1: oklch(0.868 0.007 39.5);
+  --chart-2: oklch(0.547 0.021 43.1);
+  --chart-3: oklch(0.438 0.017 39.3);
+  --chart-4: oklch(0.367 0.016 35.7);
+  --chart-5: oklch(0.268 0.011 36.5);
+  --sidebar: oklch(0.214 0.009 43.1);
+  --sidebar-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-accent: oklch(0.268 0.011 36.5);
+  --sidebar-accent-foreground: oklch(0.986 0.002 67.8);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.547 0.021 43.1);
+}
+
+[data-theme="dark"][data-accent="amber"],
+[data-theme="dark"] [data-accent="amber"] {
+  --primary: oklch(0.473 0.137 46.201);
+  --primary-foreground: oklch(0.987 0.022 95.277);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.879 0.169 91.605);
+  --chart-2: oklch(0.769 0.188 70.08);
+  --chart-3: oklch(0.666 0.179 58.318);
+  --chart-4: oklch(0.555 0.163 48.998);
+  --chart-5: oklch(0.473 0.137 46.201);
+  --sidebar-primary: oklch(0.769 0.188 70.08);
+  --sidebar-primary-foreground: oklch(0.279 0.077 45.635);
+}
+
+[data-theme="dark"][data-accent="blue"],
+[data-theme="dark"] [data-accent="blue"] {
+  --primary: oklch(0.424 0.199 265.638);
+  --primary-foreground: oklch(0.97 0.014 254.604);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  --sidebar-primary: oklch(0.623 0.214 259.815);
+  --sidebar-primary-foreground: oklch(0.97 0.014 254.604);
+}
+
+[data-theme="dark"][data-accent="cyan"],
+[data-theme="dark"] [data-accent="cyan"] {
+  --primary: oklch(0.45 0.085 224.283);
+  --primary-foreground: oklch(0.984 0.019 200.873);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.865 0.127 207.078);
+  --chart-2: oklch(0.715 0.143 215.221);
+  --chart-3: oklch(0.609 0.126 221.723);
+  --chart-4: oklch(0.52 0.105 223.128);
+  --chart-5: oklch(0.45 0.085 224.283);
+  --sidebar-primary: oklch(0.715 0.143 215.221);
+  --sidebar-primary-foreground: oklch(0.302 0.056 229.695);
+}
+
+[data-theme="dark"][data-accent="emerald"],
+[data-theme="dark"] [data-accent="emerald"] {
+  --primary: oklch(0.432 0.095 166.913);
+  --primary-foreground: oklch(0.979 0.021 166.113);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.845 0.143 164.978);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.596 0.145 163.225);
+  --chart-4: oklch(0.508 0.118 165.612);
+  --chart-5: oklch(0.432 0.095 166.913);
+  --sidebar-primary: oklch(0.696 0.17 162.48);
+  --sidebar-primary-foreground: oklch(0.262 0.051 172.552);
+}
+
+[data-theme="dark"][data-accent="fuchsia"],
+[data-theme="dark"] [data-accent="fuchsia"] {
+  --primary: oklch(0.452 0.211 324.591);
+  --primary-foreground: oklch(0.977 0.017 320.058);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.833 0.145 321.434);
+  --chart-2: oklch(0.667 0.295 322.15);
+  --chart-3: oklch(0.591 0.293 322.896);
+  --chart-4: oklch(0.518 0.253 323.949);
+  --chart-5: oklch(0.452 0.211 324.591);
+  --sidebar-primary: oklch(0.667 0.295 322.15);
+  --sidebar-primary-foreground: oklch(0.977 0.017 320.058);
+}
+
+[data-theme="dark"][data-accent="green"],
+[data-theme="dark"] [data-accent="green"] {
+  --primary: oklch(0.448 0.119 151.328);
+  --primary-foreground: oklch(0.982 0.018 155.826);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.871 0.15 154.449);
+  --chart-2: oklch(0.723 0.219 149.579);
+  --chart-3: oklch(0.627 0.194 149.214);
+  --chart-4: oklch(0.527 0.154 150.069);
+  --chart-5: oklch(0.448 0.119 151.328);
+  --sidebar-primary: oklch(0.723 0.219 149.579);
+  --sidebar-primary-foreground: oklch(0.982 0.018 155.826);
+}
+
+[data-theme="dark"][data-accent="indigo"],
+[data-theme="dark"] [data-accent="indigo"] {
+  --primary: oklch(0.398 0.195 277.366);
+  --primary-foreground: oklch(0.962 0.018 272.314);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.785 0.115 274.713);
+  --chart-2: oklch(0.585 0.233 277.117);
+  --chart-3: oklch(0.511 0.262 276.966);
+  --chart-4: oklch(0.457 0.24 277.023);
+  --chart-5: oklch(0.398 0.195 277.366);
+  --sidebar-primary: oklch(0.585 0.233 277.117);
+  --sidebar-primary-foreground: oklch(0.962 0.018 272.314);
+}
+
+[data-theme="dark"][data-accent="lime"],
+[data-theme="dark"] [data-accent="lime"] {
+  --primary: oklch(0.768 0.233 130.85);
+  --primary-foreground: oklch(0.405 0.101 131.063);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.897 0.196 126.665);
+  --chart-2: oklch(0.768 0.233 130.85);
+  --chart-3: oklch(0.648 0.2 131.684);
+  --chart-4: oklch(0.532 0.157 131.589);
+  --chart-5: oklch(0.453 0.124 130.933);
+  --sidebar-primary: oklch(0.768 0.233 130.85);
+  --sidebar-primary-foreground: oklch(0.274 0.072 132.109);
+}
+
+[data-theme="dark"][data-accent="orange"],
+[data-theme="dark"] [data-accent="orange"] {
+  --primary: oklch(0.47 0.157 37.304);
+  --primary-foreground: oklch(0.98 0.016 73.684);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.837 0.128 66.29);
+  --chart-2: oklch(0.705 0.213 47.604);
+  --chart-3: oklch(0.646 0.222 41.116);
+  --chart-4: oklch(0.553 0.195 38.402);
+  --chart-5: oklch(0.47 0.157 37.304);
+  --sidebar-primary: oklch(0.705 0.213 47.604);
+  --sidebar-primary-foreground: oklch(0.98 0.016 73.684);
+}
+
+[data-theme="dark"][data-accent="pink"],
+[data-theme="dark"] [data-accent="pink"] {
+  --primary: oklch(0.459 0.187 3.815);
+  --primary-foreground: oklch(0.971 0.014 343.198);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.823 0.12 346.018);
+  --chart-2: oklch(0.656 0.241 354.308);
+  --chart-3: oklch(0.592 0.249 0.584);
+  --chart-4: oklch(0.525 0.223 3.958);
+  --chart-5: oklch(0.459 0.187 3.815);
+  --sidebar-primary: oklch(0.656 0.241 354.308);
+  --sidebar-primary-foreground: oklch(0.971 0.014 343.198);
+}
+
+[data-theme="dark"][data-accent="purple"],
+[data-theme="dark"] [data-accent="purple"] {
+  --primary: oklch(0.438 0.218 303.724);
+  --primary-foreground: oklch(0.977 0.014 308.299);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.827 0.119 306.383);
+  --chart-2: oklch(0.627 0.265 303.9);
+  --chart-3: oklch(0.558 0.288 302.321);
+  --chart-4: oklch(0.496 0.265 301.924);
+  --chart-5: oklch(0.438 0.218 303.724);
+  --sidebar-primary: oklch(0.627 0.265 303.9);
+  --sidebar-primary-foreground: oklch(0.977 0.014 308.299);
+}
+
+[data-theme="dark"][data-accent="red"],
+[data-theme="dark"] [data-accent="red"] {
+  --primary: oklch(0.444 0.177 26.899);
+  --primary-foreground: oklch(0.971 0.013 17.38);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.808 0.114 19.571);
+  --chart-2: oklch(0.637 0.237 25.331);
+  --chart-3: oklch(0.577 0.245 27.325);
+  --chart-4: oklch(0.505 0.213 27.518);
+  --chart-5: oklch(0.444 0.177 26.899);
+  --sidebar-primary: oklch(0.637 0.237 25.331);
+  --sidebar-primary-foreground: oklch(0.971 0.013 17.38);
+}
+
+[data-theme="dark"][data-accent="rose"],
+[data-theme="dark"] [data-accent="rose"] {
+  --primary: oklch(0.455 0.188 13.697);
+  --primary-foreground: oklch(0.969 0.015 12.422);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.81 0.117 11.638);
+  --chart-2: oklch(0.645 0.246 16.439);
+  --chart-3: oklch(0.586 0.253 17.585);
+  --chart-4: oklch(0.514 0.222 16.935);
+  --chart-5: oklch(0.455 0.188 13.697);
+  --sidebar: oklch(0.21 0.006 285.885);
+  --sidebar-primary: oklch(0.645 0.246 16.439);
+  --sidebar-primary-foreground: oklch(0.969 0.015 12.422);
+}
+
+[data-theme="dark"][data-accent="sky"],
+[data-theme="dark"] [data-accent="sky"] {
+  --primary: oklch(0.443 0.11 240.79);
+  --primary-foreground: oklch(0.977 0.013 236.62);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.828 0.111 230.318);
+  --chart-2: oklch(0.685 0.169 237.323);
+  --chart-3: oklch(0.588 0.158 241.966);
+  --chart-4: oklch(0.5 0.134 242.749);
+  --chart-5: oklch(0.443 0.11 240.79);
+  --sidebar-primary: oklch(0.685 0.169 237.323);
+  --sidebar-primary-foreground: oklch(0.293 0.066 243.157);
+}
+
+[data-theme="dark"][data-accent="teal"],
+[data-theme="dark"] [data-accent="teal"] {
+  --primary: oklch(0.437 0.078 188.216);
+  --primary-foreground: oklch(0.984 0.014 180.72);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.855 0.138 181.071);
+  --chart-2: oklch(0.704 0.14 182.503);
+  --chart-3: oklch(0.6 0.118 184.704);
+  --chart-4: oklch(0.511 0.096 186.391);
+  --chart-5: oklch(0.437 0.078 188.216);
+  --sidebar-primary: oklch(0.704 0.14 182.503);
+  --sidebar-primary-foreground: oklch(0.277 0.046 192.524);
+}
+
+[data-theme="dark"][data-accent="violet"],
+[data-theme="dark"] [data-accent="violet"] {
+  --primary: oklch(0.432 0.232 292.759);
+  --primary-foreground: oklch(0.969 0.016 293.756);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.811 0.111 293.571);
+  --chart-2: oklch(0.606 0.25 292.717);
+  --chart-3: oklch(0.541 0.281 293.009);
+  --chart-4: oklch(0.491 0.27 292.581);
+  --chart-5: oklch(0.432 0.232 292.759);
+  --sidebar-primary: oklch(0.606 0.25 292.717);
+  --sidebar-primary-foreground: oklch(0.969 0.016 293.756);
+}
+
+[data-theme="dark"][data-accent="yellow"],
+[data-theme="dark"] [data-accent="yellow"] {
+  --primary: oklch(0.795 0.184 86.047);
+  --primary-foreground: oklch(0.421 0.095 57.708);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --chart-1: oklch(0.905 0.182 98.111);
+  --chart-2: oklch(0.795 0.184 86.047);
+  --chart-3: oklch(0.681 0.162 75.834);
+  --chart-4: oklch(0.554 0.135 66.442);
+  --chart-5: oklch(0.476 0.114 61.907);
+  --sidebar-primary: oklch(0.795 0.184 86.047);
+  --sidebar-primary-foreground: oklch(0.987 0.026 102.212);
+}
+
+/* @themes:end */
+body { background: var(--background); color: var(--foreground); }
+button, select, input, textarea { color: inherit; font-family: inherit; }
+
+/* Box model: Tailwind's preflight sets `box-sizing: border-box` on everything,
+   and shadcn's component sizes assume it — `h-9` is 2.25rem *including* the
+   border, so without this every bordered control (buttons, inputs, selects,
+   dialogs) renders 2px larger than shadcn's. Only the box model is reset
+   here; the components still set their own margins and padding. */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Cursor: shadcn v4's globals.css opts every enabled button (and anything
+   with role=button) into the hand cursor, because Tailwind v4's preflight
+   dropped the UA's `button { cursor: pointer }` — which is why shadcn
+   components used to render text-like rows with an arrow cursor. Same rule
+   here, scoped to the Live root so it cannot leak into a host page's own
+   markup. The exceptions set their own cursor below: the sidebar rail
+   (resize), a tooltip anchor (help), and disabled controls. */
+#lv button:not(:disabled),
+#lv [role="button"]:not(:disabled),
+#lv a[href] { cursor: pointer; }
+
+body { font-family: system-ui, sans-serif; max-width: 60rem; margin: 2rem auto; }
+.chrome button, .chrome a { margin-right: 0.5rem; }
+.chrome button { padding: 0.3rem 0.8rem; }
+.chrome a { color: var(--primary); }
+
+#log { border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem 1rem;
+       height: 9rem; overflow-y: auto; list-style: none; font-size: 0.85rem; }
+#log li.sent { color: var(--accent); }
+#log li.recv { color: var(--ok); }
+#log li.sys  { color: var(--muted-foreground); font-style: italic; }
+#log li.err  { color: var(--destructive); }
+#log li.hook { color: var(--hook); }
+
+/* --- shared layout (master-detail) ---------------------------------- */
+#lv .layout { display: flex; gap: 1.5rem; align-items: flex-start; }
+#lv .layout > .tbl-wrap { flex: 1; min-width: 0; }
+
+/* --- kitchen-sink sections ------------------------------------------- */
+#lv section { border: 1px solid var(--border); border-radius: var(--radius-lg);
+              background: var(--card); color: var(--card-foreground);
+              padding: 0.75rem 1.2rem; margin-bottom: 1rem; }
+#lv section h2 { margin: 0 0 0.6rem; font-size: 1rem; color: var(--muted-foreground);
+                 text-transform: uppercase; letter-spacing: 0.05em; }
+#lv .ks-count { font: 1.4rem ui-monospace, monospace; margin: 0 0 0.5rem; }
+
+/* --- Button / SubmitButton (shadcn Button) ----------------------------- */
+/* Style off data-variant / data-size rather than a class per variant: the
+   variant string then appears in exactly one slot, so a variant change is
+   one patch instead of two. */
+#lv .btn { display: inline-flex; align-items: center; justify-content: center;
+           gap: 0.5rem; flex-shrink: 0; white-space: nowrap; cursor: pointer;
+           border: 1px solid transparent; border-radius: var(--radius-md);
+           background: none; color: inherit; font: inherit; font-size: 0.875rem;
+           font-weight: 500; line-height: 1; outline: none; user-select: none;
+           transition: background-color .15s, color .15s, border-color .15s, box-shadow .15s; }
+#lv .btn:focus-visible { border-color: var(--ring);
+                         box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent); }
+#lv .btn:disabled { pointer-events: none; opacity: 0.5; }
+
+/* sizes. shadcn's sizes are `h-9 px-4 py-2 has-[>svg]:px-3` and friends: the
+   height is the same for every variant (border-box, see the reset at the top
+   of this file), and a direct svg child narrows the inline padding. */
+#lv .btn[data-size="default"] { height: 2.25rem; padding: 0 1rem; }
+#lv .btn[data-size="default"]:has(> svg) { padding: 0 0.75rem; }
+#lv .btn[data-size="xs"] { height: 1.5rem; padding: 0 0.5rem; gap: 0.25rem;
+                           font-size: 0.75rem; }
+#lv .btn[data-size="xs"]:has(> svg) { padding: 0 0.375rem; }
+#lv .btn[data-size="xs"] > svg, #lv .btn[data-size="icon-xs"] > svg {
+  width: 0.75rem; height: 0.75rem; }
+#lv .btn[data-size="sm"] { height: 2rem; padding: 0 0.75rem; gap: 0.375rem; }
+#lv .btn[data-size="sm"]:has(> svg) { padding: 0 0.625rem; }
+#lv .btn[data-size="lg"] { height: 2.5rem; padding: 0 1.5rem; }
+#lv .btn[data-size="lg"]:has(> svg) { padding: 0 1rem; }
+#lv .btn[data-size="icon"] { width: 2.25rem; height: 2.25rem; padding: 0; }
+#lv .btn[data-size="icon-xs"] { width: 1.5rem; height: 1.5rem; padding: 0;
+                                font-size: 0.75rem; }
+#lv .btn[data-size="icon-sm"] { width: 2rem; height: 2rem; padding: 0; }
+#lv .btn[data-size="icon-lg"] { width: 2.5rem; height: 2.5rem; padding: 0; }
+
+/* variants. Only `outline` carries a shadow in shadcn v4; destructive is
+   `text-white` (there is no --destructive-foreground token any more) and
+   drops to 60% of the destructive colour in dark mode. */
+#lv .btn[data-variant="default"] { background: var(--primary); color: var(--primary-foreground); }
+#lv .btn[data-variant="default"]:hover { background: color-mix(in oklab, var(--primary) 90%, transparent); }
+#lv .btn[data-variant="destructive"] { background: var(--destructive); color: #fff; }
+#lv .btn[data-variant="destructive"]:hover {
+  background: color-mix(in oklab, var(--destructive) 90%, transparent); }
+#lv .btn[data-variant="destructive"]:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--destructive) 20%, transparent); }
+#lv .btn[data-variant="outline"] { border-color: var(--border); background: var(--background);
+                                   box-shadow: var(--shadow-xs); }
+#lv .btn[data-variant="outline"]:hover { background: var(--accent); color: var(--accent-foreground); }
+#lv .btn[data-variant="secondary"] { background: var(--secondary); color: var(--secondary-foreground); }
+#lv .btn[data-variant="secondary"]:hover {
+  background: color-mix(in oklab, var(--secondary) 80%, transparent); }
+#lv .btn[data-variant="ghost"]:hover { background: var(--accent); color: var(--accent-foreground); }
+/* shadcn underlines the link variant on hover only. It keeps the size's
+   height so it lines up with sibling buttons. */
+#lv .btn[data-variant="link"] { color: var(--primary); text-underline-offset: 4px; }
+#lv .btn[data-variant="link"]:hover { text-decoration: underline; }
+#lv .btn[data-variant="link"]:has(> svg) { padding-inline: 0; }
+
+/* shadcn's dark-mode variants: the outline and ghost backgrounds become a
+   translucent wash of the (dark) input/accent tokens, and destructive drops
+   to 60%. The mode lives on <html>, outside the Live root, which is why these
+   selectors reach in from :root instead of hanging off a component class. */
+:root[data-theme="dark"] #lv .btn[data-variant="outline"] { border-color: var(--input);
+  background: color-mix(in oklab, var(--input) 30%, transparent); }
+:root[data-theme="dark"] #lv .btn[data-variant="outline"]:hover {
+  background: color-mix(in oklab, var(--input) 50%, transparent); }
+:root[data-theme="dark"] #lv .btn[data-variant="ghost"]:hover {
+  background: color-mix(in oklab, var(--accent) 50%, transparent); }
+:root[data-theme="dark"] #lv .btn[data-variant="destructive"] {
+  background: color-mix(in oklab, var(--destructive) 60%, transparent); }
+
+/* --- Flash ------------------------------------------------------------- */
+#lv .flash { padding: 0.4rem 0.9rem; border-radius: var(--radius-md);
+             background: var(--popover); color: var(--popover-foreground);
+             border: 1px solid var(--border); box-shadow: var(--shadow-md);
+             display: inline-block; font-size: 0.875rem; }
+#lv .flash-success { border-color: var(--ok); }
+#lv .flash-err { border-color: var(--destructive); color: var(--destructive); }
+#lv .ks-flash-slot { display: inline-block; margin-left: 0.5rem; }
+
+/* --- Table -------------------------------------------------------------- */
+#lv .tbl { border-collapse: collapse; width: 100%; }
+#lv .tbl th, #lv .tbl td { border: 1px solid var(--border); padding: 0.3rem 0.75rem;
+                           text-align: left; font: 0.9rem/1.4 ui-monospace, monospace; }
+#lv .tbl th { background: var(--muted); user-select: none; }
+#lv .tbl th.sortable { cursor: pointer; }
+#lv .tbl th.sorted-asc, #lv .tbl th.sorted-desc { color: var(--primary); }
+#lv .tbl td { overflow: hidden; }
+#lv .tbl tbody tr:nth-child(even) { background: var(--card); }
+#lv .tbl td:hover { background: var(--accent); }
+#lv .info-btn { border: 0; background: none; cursor: pointer; color: var(--primary);
+                padding: 0 0.3rem; }
+#lv .info-btn.active { background: var(--accent); border-radius: 3px; }
+#lv .row-menu-btn { border: 0; background: none; cursor: pointer;
+                    font-size: 1rem; padding: 0 0.4rem; }
+
+/* --- table toolbar / controls / pagination ---------------------------- */
+#lv .tbl-toolbar { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;
+                   font-size: 0.9rem; }
+#lv .tbl-toolbar select { font: inherit; height: 1.75rem; padding: 0 0.5rem; }
+#lv .toolbar-gap { flex: 1; }
+#lv .tbl-controls { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.5rem;
+                    font-size: 0.85rem; flex-wrap: wrap; }
+#lv .tbl-controls button { font: inherit; height: 1.75rem; padding: 0 0.7rem; }
+#lv .tbl-controls button[disabled] { opacity: 0.45; }
+#lv .tbl-controls .page-info { color: var(--muted-foreground); }
+#lv .tbl-controls .gap { flex: 1; }
+#lv .tbl-controls select { font: inherit; padding: 0.15rem 0.3rem; }
+
+/* --- master-detail card ----------------------------------------------- */
+/* The master-detail panel is a Card (#detail, built in views/detail.zig), so
+   it keeps the card surface and header and only adds width + the fact list. */
+#lv .zc-card#detail { width: 16rem; flex-shrink: 0; position: relative; }
+#lv .zc-card#detail .zc-card-title { font-size: 1.3rem; }
+#lv .zc-card#detail dl { display: grid; grid-template-columns: auto 1fr;
+                         gap: 0.2rem 0.9rem; margin: 0; font-size: 0.9rem; }
+#lv .zc-card#detail dt { color: var(--muted-foreground); }
+#lv .zc-card#detail dd { margin: 0; }
+#lv .detail-close { position: absolute; top: 0.4rem; right: 0.5rem; border: 0;
+                    background: none; font-size: 1.1rem; cursor: pointer; padding: 0;
+                    line-height: 1; }
+
+/* --- form components ---------------------------------------------------- */
+#lv form label { display: block; margin: 0.5rem 0 0.2rem;
+  font-size: 0.875rem; line-height: 1; font-weight: 500; }
+/* shadcn's Input/Select base: `h-9 rounded-md border border-input px-3 py-1
+   bg-transparent shadow-xs` + a 3px ring and a muted placeholder on focus.
+   The transparent background is deliberate: on a card the control shows the
+   card, not the page. */
+#lv input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+#lv select {
+  height: 2.25rem; padding: 0 0.75rem; font: inherit; font-size: 0.875rem;
+  background: transparent; color: var(--foreground);
+  border: 1px solid var(--input); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xs); outline: none; }
+@media (max-width: 767px) {
+  #lv input:not([type="checkbox"]):not([type="radio"]):not([type="range"]) {
+    font-size: 1rem; }
+}
+#lv input::placeholder { color: var(--muted-foreground); }
+#lv input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):focus-visible,
+#lv select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 50%, transparent); }
+:root[data-theme="dark"] #lv input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+:root[data-theme="dark"] #lv select {
+  background: color-mix(in oklab, var(--input) 30%, transparent); }
+#lv .error { color: var(--destructive); font-size: 0.85rem; display: block; min-height: 1.2em; }
+#lv .status { color: var(--ok); }
+
+/* --- Tabs --------------------------------------------------------------- */
+#lv .zc-tabs-header { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--border); }
+#lv .zc-tabs-header button { border: 0; background: none; padding: 0.5rem 1rem;
+                             font: inherit; cursor: pointer; }
+#lv .zc-tabs-header button.active { border-bottom: 2px solid var(--primary); font-weight: 600; }
+#lv .zc-tab-panel { padding: 1rem 0; }
+
+/* --- chart (nested segments demo) --------------------------------------- */
+#lv .chart-row { display: flex; align-items: center; gap: 0.75rem;
+                 margin: 0.3rem 0; font: 0.85rem ui-monospace, monospace; }
+#lv .chart-label { width: 2.5rem; color: var(--muted-foreground); }
+#lv .chart-bar { flex: 1; background: var(--muted); border-radius: 3px; }
+#lv .chart-fill { display: inline-block; background: var(--primary); color: var(--primary-foreground);
+                  padding: 0.1rem 0.4rem; border-radius: 3px; min-width: 1.5rem; }
+
+/* --- Accordion ------------------------------------------------------------ */
+#lv .zc-acc-section { border-bottom: 1px solid var(--border); }
+#lv .zc-acc-header { width: 100%; text-align: left; border: 0; background: none;
+                     padding: 0.6rem 0.2rem; font: inherit; cursor: pointer; }
+#lv .zc-acc-header[aria-expanded="true"] { font-weight: 600; }
+#lv .zc-acc-body { padding: 0 0.2rem 0.8rem; color: var(--foreground); opacity: 0.85; }
+
+/* --- Dialog --------------------------------------------------------------- */
+#lv .zc-dialog { position: fixed; inset: 0; z-index: 20; }
+#lv .zc-dialog-backdrop { position: absolute; inset: 0; background: rgb(0 0 0 / 0.5); }
+/* shadcn: `max-w-[calc(100%-2rem)] sm:max-w-lg` (32rem), `p-6`, centred. */
+#lv .zc-dialog-panel { position: relative; max-width: 32rem; margin: 50vh auto 0;
+                        transform: translateY(-50%);
+                        background: var(--background); color: var(--foreground);
+                        border: 1px solid var(--border); border-radius: var(--radius-lg);
+                        padding: 1.5rem; box-shadow: var(--shadow-lg); }
+#lv .zc-dialog-panel h2 { margin: 0 0 0.5rem; font-size: 1.125rem; line-height: 1;
+                          font-weight: 600; }
+#lv .zc-dialog-panel > * + * { margin-top: 1rem; }
+#lv .zc-dialog-close { position: absolute; top: 1rem; right: 1rem; border: 0;
+                       background: none; font-size: 1rem; line-height: 1;
+                       opacity: 0.7; cursor: pointer; }
+#lv .zc-dialog-close:hover { opacity: 1; }
+
+/* --- Toast (a stack of Flash-style messages, popped over a corner) ------ */
+/* The region is the persistent viewport: it exists from mount, is fixed to
+   the viewport (never the page), and takes no pointer events of its own —
+   only the toasts do. Showing and dismissing a toast are child patches
+   inside it, so CSS here positions the region once and animates each toast
+   as it is inserted. */
+#lv .zc-toast-region { position: fixed; z-index: 50; display: flex;
+                       flex-direction: column; gap: 0.5rem; padding: 1rem;
+                       width: min(24rem, 100vw); pointer-events: none;
+                       --toast-from: -0.4rem; }
+/* The children are in age order (oldest first), so `flex-direction` decides
+   which end of the stack the newest toast lands on: reversed for a top
+   corner (newest at the top, nearest the edge), normal for a bottom corner
+   (newest at the bottom). The slide-in direction follows the same edge. */
+#lv .zc-toast-region[data-corner="top-left"] { top: 0; left: 0;
+                                              flex-direction: column-reverse;
+                                              align-items: flex-start; }
+#lv .zc-toast-region[data-corner="top-right"] { top: 0; right: 0;
+                                               flex-direction: column-reverse;
+                                               align-items: flex-end; }
+#lv .zc-toast-region[data-corner="bottom-left"] { bottom: 0; left: 0;
+                                                  align-items: flex-start;
+                                                  --toast-from: 0.4rem; }
+#lv .zc-toast-region[data-corner="bottom-right"] { bottom: 0; right: 0;
+                                                   align-items: flex-end;
+                                                   --toast-from: 0.4rem; }
+
+#lv .zc-toast { pointer-events: auto; display: flex; align-items: flex-start;
+                gap: 0.875rem; width: 100%; padding: 1rem;
+                background: var(--popover); color: var(--popover-foreground);
+                border: 1px solid var(--border); border-radius: var(--radius-md);
+                box-shadow: var(--shadow-lg); font-size: 0.875rem;
+                animation: zc-toast-in 0.18s ease-out; }
+#lv .zc-toast[data-level="success"] { border-color: var(--ok); }
+#lv .zc-toast[data-level="err"] { border-color: var(--destructive); }
+#lv .zc-toast-title { font-weight: 600; }
+#lv .zc-toast-desc { color: var(--muted-foreground); }
+#lv .zc-toast[data-level="err"] .zc-toast-desc { color: var(--destructive); }
+#lv .zc-toast-close { margin-left: auto; flex-shrink: 0; }
+
+@keyframes zc-toast-in {
+  from { opacity: 0; transform: translateY(var(--toast-from)); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #lv .zc-toast { animation: none; }
+}
+
+/* --- Dropdown / Popover / Tooltip (Floating UI) --------------------------- */
+/* Dropdown menu content (shadcn DropdownMenu): a popover surface holding
+   rows. Rows are buttons here (shadcn uses divs with role=menuitem), so the
+   hook can focus them; the roles and data-slot names match shadcn's. */
+#lv .zc-dropdown { position: fixed; z-index: 30; min-width: 8rem;
+                   max-height: min(24rem, var(--radix-dropdown-menu-content-available-height, 24rem));
+                   overflow-x: hidden; overflow-y: auto;
+                   background: var(--popover); color: var(--popover-foreground);
+                   border: 1px solid var(--border); border-radius: var(--radius-md);
+                   box-shadow: var(--shadow-md); padding: 0.25rem; }
+#lv .zc-dropdown-item { position: relative; display: flex; width: 100%; align-items: center;
+                        gap: 0.5rem; border: 0; background: none; color: inherit;
+                        border-radius: var(--radius-sm); padding: 0.375rem 0.5rem;
+                        font: inherit; font-size: 0.875rem; text-align: left;
+                        outline: none; user-select: none; }
+#lv .zc-dropdown-item:hover, #lv .zc-dropdown-item:focus-visible {
+  background: var(--accent); color: var(--accent-foreground); }
+#lv .zc-dropdown-item[disabled] { pointer-events: none; opacity: 0.5; }
+#lv .zc-dropdown-item[data-variant="destructive"] { color: var(--destructive); }
+#lv .zc-dropdown-item[data-variant="destructive"]:hover,
+#lv .zc-dropdown-item[data-variant="destructive"]:focus-visible {
+  background: color-mix(in oklab, var(--destructive) 10%, transparent); color: var(--destructive); }
+/* checkbox/radio rows reserve the indicator column; inset indents a plain
+   row into it (shadcn: pl-8) */
+#lv .zc-dropdown-item-check, #lv .zc-dropdown-item-inset { padding-left: 2rem; }
+#lv .zc-dropdown-indicator { position: absolute; left: 0.5rem; display: flex;
+                             width: 0.875rem; align-items: center; justify-content: center; }
+#lv .zc-dropdown-label { padding: 0.375rem 0.5rem; font-size: 0.875rem; font-weight: 500; }
+#lv .zc-dropdown-label.zc-dropdown-item-inset { padding-left: 2rem; }
+#lv .zc-dropdown-separator { height: 1px; background: var(--border); margin: 0.25rem -0.25rem; }
+#lv .zc-dropdown-shortcut { margin-left: auto; font-size: 0.75rem; letter-spacing: 0.1em;
+                            opacity: 0.6; }
+#lv .zc-dropdown-chevron { margin-left: auto; }
+#lv .zc-dropdown-sub { z-index: 31; box-shadow: var(--shadow-lg); }
+/* The trigger is shadcn's PopoverTrigger wrapping an outline Button; this
+   library renders it itself, so it needs Button's look. */
+#lv .zc-popover-trigger { display: inline-flex; align-items: center; justify-content: center;
+                          gap: 0.5rem; height: 2.25rem; padding: 0 1rem;
+                          font-weight: 500; box-shadow: var(--shadow-xs);
+                          border: 1px solid var(--border); border-radius: var(--radius-md);
+                          background: var(--background); color: inherit; font: inherit;
+                          font-size: 0.875rem; }
+#lv .zc-popover-trigger:hover { background: var(--accent); color: var(--accent-foreground); }
+#lv .zc-popover { position: fixed; z-index: 30; width: 18rem;
+                  max-width: calc(100vw - 2rem); background: var(--popover);
+                  color: var(--popover-foreground);
+                  border: 1px solid var(--border); border-radius: var(--radius-md);
+                  box-shadow: var(--shadow-md); padding: 1rem; }
+#lv .zc-popover p { margin: 0; font-size: 0.85rem; }
+#lv .zc-tooltip { position: fixed; z-index: 40; background: var(--primary);
+                  color: var(--primary-foreground);
+                  padding: 0.375rem 0.75rem; border-radius: var(--radius-md);
+                  font-size: 0.75rem; }
+#lv .tip-anchor { text-decoration: underline dotted; cursor: help; }
+
+/* --- Icon (lucide shapes, inlined) --------------------------------------- */
+/* An icon is 1rem by default and inherits the text colour; the contexts
+   below (a sidebar row, a menu action) size it themselves. */
+#lv .zc-icon { flex-shrink: 0; width: 1rem; height: 1rem; }
+#lv .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+               overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+/* --- Avatar -------------------------------------------------------------- */
+#lv .zc-avatar { position: relative; display: flex; width: 2rem; height: 2rem;
+                 flex-shrink: 0; overflow: hidden; border-radius: 9999px; }
+#lv .zc-avatar-image { position: absolute; inset: 0; width: 100%; height: 100%;
+                       object-fit: cover; }
+#lv .zc-avatar-fallback { display: flex; width: 100%; height: 100%; align-items: center;
+                          justify-content: center; border-radius: inherit;
+                          background: var(--muted); color: var(--muted-foreground);
+                          font-size: 0.875rem; }
+/* shadcn's sidebar avatars are rounded squares (rounded-lg). */
+#lv .zc-avatar-square { border-radius: var(--radius-lg); }
+
+/* --- Breadcrumb ---------------------------------------------------------- */
+#lv .zc-breadcrumb-list { display: flex; flex-wrap: wrap; align-items: center;
+                          gap: 0.375rem; margin: 0; padding: 0; list-style: none;
+                          font-size: 0.875rem; }
+@media (min-width: 640px) { #lv .zc-breadcrumb-list { gap: 0.625rem; } }
+#lv .zc-breadcrumb-item { display: inline-flex; align-items: center; gap: 0.375rem; }
+#lv .zc-breadcrumb-link { color: var(--muted-foreground); text-decoration: none;
+                          transition: color 0.15s; }
+#lv .zc-breadcrumb-link:hover { color: var(--foreground); }
+#lv .zc-breadcrumb-page { color: var(--foreground); }
+#lv .zc-breadcrumb-separator { width: 0.875rem; height: 0.875rem; color: var(--muted-foreground); }
+
+/* --- Collapsible (shadcn Collapsible) ------------------------------------ */
+/* The content stays in the DOM and is collapsed with a grid row, so opening
+   and closing is one `data-state` patch and CSS animates the height.
+   `visibility` takes the closed content out of the tab order. */
+#lv .zc-collapsible-content { display: grid; grid-template-rows: 1fr;
+                              transition: grid-template-rows 0.2s ease; }
+#lv .zc-collapsible[data-state="closed"] .zc-collapsible-content {
+  grid-template-rows: 0fr; visibility: hidden; }
+#lv .zc-collapsible-inner { overflow: hidden; min-height: 0; }
+
+/* --- Sidebar (shadcn Sidebar) ------------------------------------------- */
+/* The provider is the whole layout: it carries `data-state`, `data-side`,
+   `data-variant` and the configured `data-collapsible` mode, and every part
+   below is styled from those attributes. Flipping the open bool is therefore
+   ONE patch, and the animation is entirely CSS — no client state, no hook.
+
+   shadcn puts `data-state` on the Sidebar root and uses Tailwind's
+   group/peer variants to reach the siblings (the inset, the rail). One
+   provider-level attribute is the same styling with one patch instead of a
+   patched attribute per element. */
+#lv .zc-sidebar-wrapper {
+  --sidebar-width: 16rem;
+  --sidebar-width-icon: 3rem;
+  --sidebar-width-mobile: 18rem;
+  /* The site header's height; a full-width header offsets the sidebar by it. */
+  --header-height: 4rem;
+  display: flex; width: 100%; min-height: 100svh;
+  color: var(--sidebar-foreground);
+}
+/* shadcn: has-data-[variant=inset]:bg-sidebar — the inset page shows the
+   sidebar colour through the gap around the content card. */
+#lv .zc-sidebar-wrapper[data-variant="inset"] { background: var(--sidebar); }
+/* The sidebar column comes first in the DOM because its gap is what reserves
+   the width, so a right-hand sidebar reverses the row: the gap (and the fixed
+   container) move to the right and the inset starts at the viewport edge.
+   shadcn spells this `data-[side=right]:order-last` on the Sidebar. The
+   composed layout (`SidebarLayout`) keeps its row in `.zc-sidebar-body`;
+   a hand-composed provider has the columns directly in the wrapper. */
+#lv .zc-sidebar-wrapper[data-side="right"]:has(> .zc-sidebar) { flex-direction: row-reverse; }
+#lv .zc-sidebar-body { display: flex; flex: 1; min-width: 0; }
+#lv .zc-sidebar-wrapper[data-side="right"] .zc-sidebar-body { flex-direction: row-reverse; }
+/* A full-width header turns the frame into a column: the bar across the top,
+   the sidebar and content below it (sidebar-16's structure). */
+#lv .zc-sidebar-wrapper[data-header="full"] { flex-direction: column; }
+
+#lv .zc-sidebar { position: relative; }
+#lv .zc-sidebar-inner { display: flex; height: 100%; width: 100%;
+                        flex-direction: column; background: var(--sidebar); }
+#lv .zc-sidebar-wrapper[data-variant="floating"] .zc-sidebar-inner {
+  border: 1px solid var(--sidebar-border); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm); }
+
+/* Mobile first: the sidebar is a drawer over the content, opened by the same
+   attribute the desktop layout uses. shadcn swaps in a Sheet here; this is
+   the CSS-only equivalent (no portal, no viewport hook, one state). */
+#lv .zc-sidebar-gap { width: 0; }
+#lv .zc-sidebar-container { position: fixed; inset-block: 0; z-index: 40;
+                            width: var(--sidebar-width-mobile);
+                            transition: transform 0.2s ease; }
+#lv .zc-sidebar-wrapper[data-side="left"] .zc-sidebar-container { left: 0; }
+#lv .zc-sidebar-wrapper[data-side="right"] .zc-sidebar-container { right: 0; }
+#lv .zc-sidebar-scrim { display: none; }
+#lv .zc-sidebar-wrapper[data-state="expanded"] .zc-sidebar-scrim {
+  display: block; position: fixed; inset: 0; z-index: 30; background: rgb(0 0 0 / 0.5); }
+/* The drawer is shadcn's Sheet: below 768px it slides by transform, keeps a
+   1px edge divider, and is the *only* place that translates the container.
+   On desktop the container stays pinned to the edge and collapses by width
+   (icon) or offset (offcanvas). An unscoped transform here used to take the
+   icon rail itself off-screen, leaving an empty 3rem strip. */
+@media (max-width: 767px) {
+  #lv .zc-sidebar-wrapper[data-state="collapsed"][data-side="left"] .zc-sidebar-container {
+    transform: translateX(-100%); }
+  #lv .zc-sidebar-wrapper[data-state="collapsed"][data-side="right"] .zc-sidebar-container {
+    transform: translateX(100%); }
+  #lv .zc-sidebar-wrapper[data-side="left"] .zc-sidebar-container {
+    border-right: 1px solid var(--border); }
+  #lv .zc-sidebar-wrapper[data-side="right"] .zc-sidebar-container {
+    border-left: 1px solid var(--border); }
+}
+
+@media (min-width: 768px) {
+  /* Desktop: the sidebar is fixed and the gap reserves its width, which is
+     what lets the container animate in and out without reflowing the page. */
+  #lv .zc-sidebar-gap { width: var(--sidebar-width); background: transparent;
+                        transition: width 0.2s ease; }
+  #lv .zc-sidebar-container { z-index: 10; width: var(--sidebar-width);
+                              transform: none; /* collapse is width/left here */
+                              transition: width 0.2s ease, left 0.2s ease, right 0.2s ease; }
+  #lv .zc-sidebar-scrim { display: none !important; }
+
+  #lv .zc-sidebar-wrapper[data-collapsible="offcanvas"][data-state="collapsed"] .zc-sidebar-gap {
+    width: 0; }
+  #lv .zc-sidebar-wrapper[data-side="left"][data-collapsible="offcanvas"][data-state="collapsed"] .zc-sidebar-container {
+    left: calc(var(--sidebar-width) * -1); }
+  #lv .zc-sidebar-wrapper[data-side="right"][data-collapsible="offcanvas"][data-state="collapsed"] .zc-sidebar-container {
+    right: calc(var(--sidebar-width) * -1); }
+
+  /* The full-width header is above the sidebar in flow, so the fixed
+     container starts below it (shadcn: `top-(--header-height)
+     h-[calc(100svh-var(--header-height))]`). */
+  #lv .zc-sidebar-wrapper[data-header="full"] .zc-sidebar-container {
+    top: var(--header-height); bottom: auto;
+    height: calc(100svh - var(--header-height)); }
+
+  #lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-gap {
+    width: var(--sidebar-width-icon); }
+  #lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-container {
+    width: var(--sidebar-width-icon); }
+
+  /* The bordered variants sit flush against the edge (shadcn: border-r /
+     border-l on the container). */
+  #lv .zc-sidebar-wrapper[data-variant="sidebar"][data-side="left"] .zc-sidebar-container {
+    border-right: 1px solid var(--sidebar-border); }
+  #lv .zc-sidebar-wrapper[data-variant="sidebar"][data-side="right"] .zc-sidebar-container {
+    border-left: 1px solid var(--sidebar-border); }
+
+  /* floating / inset: the sidebar is a padded card, so both the gap and the
+     collapsed width grow by that padding (shadcn's calc(...) expressions). */
+  #lv .zc-sidebar-wrapper[data-variant="floating"] .zc-sidebar-container,
+  #lv .zc-sidebar-wrapper[data-variant="inset"] .zc-sidebar-container { padding: 0.5rem; }
+  #lv .zc-sidebar-wrapper[data-variant="floating"][data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-gap,
+  #lv .zc-sidebar-wrapper[data-variant="inset"][data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-gap {
+    width: calc(var(--sidebar-width-icon) + 1rem); }
+  #lv .zc-sidebar-wrapper[data-variant="floating"][data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-container,
+  #lv .zc-sidebar-wrapper[data-variant="inset"][data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-container {
+    width: calc(var(--sidebar-width-icon) + 1rem + 2px); }
+}
+
+/* The content side of the layout. */
+#lv .zc-sidebar-inset { position: relative; display: flex; width: 100%; flex: 1;
+                        flex-direction: column; background: var(--background); }
+@media (min-width: 768px) {
+  #lv .zc-sidebar-wrapper[data-variant="inset"] .zc-sidebar-inset {
+    margin: 0.5rem 0.5rem 0.5rem 0; border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm); }
+  #lv .zc-sidebar-wrapper[data-variant="inset"][data-side="right"] .zc-sidebar-inset {
+    margin: 0.5rem 0 0.5rem 0.5rem; }
+  #lv .zc-sidebar-wrapper[data-variant="inset"][data-state="collapsed"] .zc-sidebar-inset {
+    margin-left: 0.5rem; }
+}
+
+/* Site header (shadcn's sidebar-16 `SiteHeader`): the bar above the page
+   content — 4rem tall, page background, a bottom rule — that can stay put
+   while the page scrolls. Its z-index sits under the overlay ladder
+   (dropdowns 30, tooltips 40, toasts 50), so a menu opened from the header
+   still paints over it. */
+#lv .zc-site-header { display: flex; width: 100%; flex-shrink: 0; align-items: center;
+                      background: var(--background);
+                      border-bottom: 1px solid var(--border); }
+#lv .zc-site-header-bar { display: flex; width: 100%;
+                          min-height: var(--header-height, 4rem);
+                          align-items: center; gap: 0.5rem; padding: 0 1rem;
+                          transition: min-height 0.2s linear; }
+#lv .zc-site-header[data-sticky="true"] { position: sticky; top: 0; z-index: 10; }
+/* The block's header shrinks while the sidebar is an icon rail (shadcn:
+   group-has-data-[collapsible=icon]:h-12). Only a header inside the layout
+   picks this up; a site header above the sidebar is unaffected. */
+#lv .zc-sidebar-wrapper:not([data-header="full"])[data-collapsible="icon"][data-state="collapsed"] .zc-site-header-bar {
+  min-height: 3rem; }
+
+/* Parts: header, footer, content, groups, menus. Sizes are shadcn's. */
+#lv .zc-sidebar-header, #lv .zc-sidebar-footer { display: flex; flex-direction: column;
+                                                 gap: 0.5rem; padding: 0.5rem; }
+#lv .zc-sidebar-content { display: flex; min-height: 0; flex: 1; flex-direction: column;
+                          gap: 0.5rem; overflow: auto; }
+#lv .zc-sidebar-group { position: relative; display: flex; width: 100%; min-width: 0;
+                        flex-direction: column; padding: 0.5rem; }
+#lv .zc-sidebar-group-label { display: flex; height: 2rem; flex-shrink: 0; align-items: center;
+                              border-radius: var(--radius-md); padding: 0 0.5rem;
+                              font-size: 0.75rem; font-weight: 500;
+                              color: color-mix(in oklab, var(--sidebar-foreground) 70%, transparent);
+                              transition: margin 0.2s ease, opacity 0.2s ease; }
+#lv .zc-sidebar-group-content { width: 100%; font-size: 0.875rem; }
+#lv .zc-sidebar-menu { display: flex; width: 100%; min-width: 0; flex-direction: column;
+                       gap: 0.25rem; margin: 0; padding: 0; list-style: none; }
+#lv .zc-sidebar-menu-item { position: relative; }
+#lv .zc-sidebar-menu-item[data-state="closed"] > .zc-sidebar-menu-sub { display: none; }
+
+#lv .zc-sidebar-menu-button { display: flex; width: 100%; align-items: center; gap: 0.5rem;
+                             overflow: hidden; border: 0; background: none; color: inherit;
+                             font: inherit; font-size: 0.875rem; text-align: left;
+                             border-radius: var(--radius-md); padding: 0.5rem; height: 2rem;
+                             outline: none; text-decoration: none;
+                             transition: width 0.2s ease, height 0.2s ease, padding 0.2s ease; }
+#lv .zc-sidebar-menu-button[data-size="sm"] { height: 1.75rem; font-size: 0.75rem; }
+#lv .zc-sidebar-menu-button[data-size="lg"] { height: 3rem; }
+#lv .zc-sidebar-menu-button[data-variant="outline"] { background: var(--background);
+  box-shadow: 0 0 0 1px var(--sidebar-border); }
+/* shadcn's `group-has-data-[sidebar=menu-action]/menu-item:pr-8`: a row with a
+   hover action pads its label clear of it. */
+#lv .zc-sidebar-menu-item:has(> .zc-sidebar-menu-action) > .zc-sidebar-menu-button {
+  padding-right: 2rem; }
+#lv .zc-sidebar-menu-button:hover, #lv .zc-sidebar-menu-button:focus-visible {
+  background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+#lv .zc-sidebar-menu-button[data-active="true"],
+#lv .zc-sidebar-menu-button:active { background: var(--sidebar-accent);
+  color: var(--sidebar-accent-foreground); font-weight: 500; }
+/* shadcn rings every sidebar control with the sidebar's own ring colour */
+#lv .zc-sidebar-menu-button:focus-visible, #lv .zc-sidebar-menu-sub-button:focus-visible,
+#lv .zc-sidebar-menu-action:focus-visible, #lv .zc-sidebar-group-action:focus-visible,
+#lv .zc-sidebar-group-label:focus-visible {
+  box-shadow: 0 0 0 2px var(--sidebar-ring); }
+#lv .zc-sidebar-menu-button > .zc-icon { width: 1rem; height: 1rem; }
+#lv .zc-sidebar-menu-label { flex: 1; min-width: 0; overflow: hidden;
+                             text-overflow: ellipsis; white-space: nowrap; }
+#lv .zc-sidebar-chevron { margin-left: auto; transition: transform 0.2s ease; }
+#lv .zc-sidebar-menu-item[data-state="open"] .zc-sidebar-chevron { transform: rotate(90deg); }
+
+#lv .zc-sidebar-menu-sub-item { position: relative; }
+#lv .zc-sidebar-menu-sub { display: flex; min-width: 0; flex-direction: column; gap: 0.25rem;
+                           margin: 0 0.875rem 0; padding: 0.125rem 0.625rem;
+                           transform: translateX(1px);
+                           border-left: 1px solid var(--sidebar-border); list-style: none; }
+#lv .zc-sidebar-menu-sub-button { display: flex; height: 1.75rem; min-width: 0; align-items: center;
+                                 gap: 0.5rem; overflow: hidden; border-radius: var(--radius-md);
+                                 padding: 0 0.5rem; font-size: 0.875rem; color: inherit;
+                                 text-decoration: none; }
+#lv .zc-sidebar-menu-sub-button > .zc-icon { width: 1rem; height: 1rem;
+  color: var(--sidebar-accent-foreground); }
+#lv .zc-sidebar-menu-sub-button[data-size="sm"] { font-size: 0.75rem; }
+#lv .zc-sidebar-menu-sub-button:hover, #lv .zc-sidebar-menu-sub-button:focus-visible,
+#lv .zc-sidebar-menu-sub-button[data-active="true"] {
+  background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+
+#lv .zc-sidebar-menu-action, #lv .zc-sidebar-group-action {
+  position: absolute; display: flex; aspect-ratio: 1; width: 1.25rem; align-items: center;
+  justify-content: center; border: 0; border-radius: var(--radius-md); padding: 0;
+  background: none; color: var(--sidebar-foreground); }
+#lv .zc-sidebar-menu-action { top: 0.375rem; right: 0.25rem; }
+#lv .zc-sidebar-menu-item:has(> .zc-sidebar-menu-button[data-size="sm"]) > .zc-sidebar-menu-action {
+  top: 0.25rem; }
+#lv .zc-sidebar-menu-item:has(> .zc-sidebar-menu-button[data-size="lg"]) > .zc-sidebar-menu-action {
+  top: 0.625rem; }
+#lv .zc-sidebar-menu-item:hover > .zc-sidebar-menu-action,
+#lv .zc-sidebar-menu-item:hover > .zc-sidebar-menu-badge {
+  color: var(--sidebar-accent-foreground); }
+#lv .zc-sidebar-group-action { top: 0.875rem; right: 0.75rem; }
+#lv .zc-sidebar-menu-action > .zc-icon, #lv .zc-sidebar-group-action > .zc-icon {
+  width: 1rem; height: 1rem; }
+#lv .zc-sidebar-menu-action:hover, #lv .zc-sidebar-menu-action:focus-visible,
+#lv .zc-sidebar-group-action:hover, #lv .zc-sidebar-group-action:focus-visible {
+  background: var(--sidebar-accent); color: var(--sidebar-accent-foreground); }
+#lv .zc-sidebar-menu-badge { position: absolute; top: 0.375rem; right: 0.25rem;
+  display: flex; height: 1.25rem;
+  min-width: 1.25rem; align-items: center; justify-content: center; border-radius: var(--radius-md);
+  padding: 0 0.25rem; font-size: 0.75rem; font-weight: 500; pointer-events: none;
+  user-select: none; font-variant-numeric: tabular-nums; }
+/* the badge and the action sit at a size-dependent offset (shadcn's
+   peer-data-[size=…]:top-1.5 / top-1 / top-2.5) */
+#lv .zc-sidebar-menu-item:has(> .zc-sidebar-menu-button[data-size="sm"]) > .zc-sidebar-menu-badge {
+  top: 0.25rem; }
+#lv .zc-sidebar-menu-item:has(> .zc-sidebar-menu-button[data-size="lg"]) > .zc-sidebar-menu-badge {
+  top: 0.625rem; }
+@media (min-width: 768px) {
+  /* shadcn's `showOnHover`: the row action appears on hover or focus. */
+  #lv .zc-sidebar-menu-action.zc-show-on-hover { opacity: 0; }
+  #lv .zc-sidebar-menu-item:hover .zc-sidebar-menu-action.zc-show-on-hover,
+  #lv .zc-sidebar-menu-item:focus-within .zc-sidebar-menu-action.zc-show-on-hover,
+  #lv .zc-sidebar-menu-action.zc-show-on-hover:focus-visible { opacity: 1; }
+}
+/* Two classes deep on purpose: `#lv .zc-sep` is declared later at the same
+   specificity, and would otherwise give every sidebar separator a 12px
+   vertical margin (shadcn's sidebar Separator is `mx-2 w-auto h-px`). */
+#lv .zc-sep.zc-sidebar-separator { margin: 0 0.5rem; width: auto; height: 1px;
+  background: var(--sidebar-border); }
+#lv .zc-sidebar-input { height: 2rem; width: 100%; border: 1px solid var(--input);
+                        border-radius: var(--radius-md); background: var(--background);
+                        padding: 0 0.75rem; font-size: 0.875rem; box-shadow: none; }
+@media (max-width: 767px) { #lv .zc-sidebar-input { font-size: 1rem; } }
+/* shadcn renders the trigger as Button size-9 with `size-7` merged over it, so
+   the class has to outrank `#lv .btn[data-size="icon"]` (1,2,0) — otherwise the
+   trigger renders 2.25rem instead of 1.75rem. */
+#lv .btn.zc-sidebar-trigger { width: 1.75rem; height: 1.75rem; }
+
+/* The rail: the hairline on the sidebar's edge that toggles it. */
+#lv .zc-sidebar-rail { position: absolute; inset-block: 0; z-index: 20; display: none;
+                       width: 1rem; border: 0; padding: 0; background: none; }
+#lv .zc-sidebar-rail::after { content: ""; position: absolute; inset-block: 0; left: 50%;
+                              width: 2px; }
+#lv .zc-sidebar-wrapper[data-side="left"] .zc-sidebar-rail { right: -1rem;
+  transform: translateX(-50%); cursor: w-resize; }
+#lv .zc-sidebar-wrapper[data-side="right"] .zc-sidebar-rail { left: 0;
+  transform: translateX(-50%); cursor: e-resize; }
+/* collapsed offcanvas: the rail moves to the page edge (shadcn's
+   `-right-2 … translate-x-0 after:left-full hover:bg-sidebar`) */
+#lv .zc-sidebar-wrapper[data-collapsible="offcanvas"][data-state="collapsed"][data-side="left"] .zc-sidebar-rail {
+  right: -0.5rem; transform: none; }
+#lv .zc-sidebar-wrapper[data-collapsible="offcanvas"][data-state="collapsed"][data-side="right"] .zc-sidebar-rail {
+  left: -0.5rem; transform: none; }
+#lv .zc-sidebar-wrapper[data-collapsible="offcanvas"][data-state="collapsed"] .zc-sidebar-rail::after {
+  left: 100%; }
+#lv .zc-sidebar-wrapper[data-side="left"][data-state="collapsed"] .zc-sidebar-rail { cursor: e-resize; }
+#lv .zc-sidebar-wrapper[data-side="right"][data-state="collapsed"] .zc-sidebar-rail { cursor: w-resize; }
+#lv .zc-sidebar-rail:hover { background: var(--sidebar); }
+#lv .zc-sidebar-rail:hover::after { background: var(--sidebar-border); }
+@media (min-width: 640px) { #lv .zc-sidebar-rail { display: flex; } }
+
+/* Collapsed to icons: labels, sub-menus, badges and actions go away and the
+   rows become the 3rem rail's squares (shadcn's group-data-[collapsible=icon]
+   rules). `zc-hide-collapsed` is the caller-side hook for a whole group that
+   should disappear instead (shadcn spells it group-data-…:hidden). */
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-menu-button {
+  width: 2rem; height: 2rem; padding: 0.5rem; overflow: hidden;
+  justify-content: center; }
+/* The lg rows are avatar/logo tiles rather than icon+label rows: in the rail
+   the tile *is* the row, so it keeps its full 2rem and the padding goes. */
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-menu-button[data-size="lg"] {
+  padding: 0; }
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-menu-label,
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-chevron,
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-menu-badge,
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-menu-action,
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-group-action,
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-menu-sub,
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-hide-collapsed {
+  display: none; }
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-group-label {
+  margin-top: -2rem; opacity: 0; pointer-events: none; }
+#lv .zc-sidebar-wrapper[data-collapsible="icon"][data-state="collapsed"] .zc-sidebar-content {
+  overflow: hidden; }
+
+/* --- Layout primitives (Card / Stack / Cluster / Grid / Container / ----- */
+/*     Separator): structure and spacing only, no hooks, no server state.  */
+/*     Spacing comes from these classes rather than inline styles, so the   */
+/*     scale stays themeable.                                              */
+
+/* Spacing scale shared by Stack / Cluster / Grid. */
+#lv .zc-gap-none { gap: 0; }
+#lv .zc-gap-sm { gap: 0.5rem; }
+#lv .zc-gap-md { gap: 1rem; }
+#lv .zc-gap-lg { gap: 1.75rem; }
+
+/* Stack: vertical flow. */
+#lv .zc-stack { display: flex; flex-direction: column; }
+#lv .zc-align-start { align-items: flex-start; }
+#lv .zc-align-center { align-items: center; }
+#lv .zc-align-end { align-items: flex-end; }
+#lv .zc-align-stretch { align-items: stretch; }
+
+/* Cluster: horizontal group that wraps. */
+#lv .zc-cluster { display: flex; flex-wrap: wrap; align-items: center; }
+#lv .zc-justify-start { justify-content: flex-start; }
+#lv .zc-justify-between { justify-content: space-between; }
+#lv .zc-justify-end { justify-content: flex-end; }
+
+/* Grid: fixed or content-driven columns. */
+#lv .zc-grid { display: grid; }
+#lv .zc-cols-one { grid-template-columns: 1fr; }
+#lv .zc-cols-two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+#lv .zc-cols-three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#lv .zc-cols-auto { grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+@media (max-width: 34rem) {
+  #lv .zc-cols-two, #lv .zc-cols-three { grid-template-columns: 1fr; }
+}
+
+/* Container: page width. */
+#lv .zc-container { width: 100%; margin: 0 auto; }
+#lv .zc-container-prose { max-width: 34rem; }
+#lv .zc-container-page { max-width: 60rem; }
+#lv .zc-container-full { max-width: none; }
+
+/* Card (shadcn Card): a surface with a header grid (title, description and
+   an optional action column), content, and an optional footer. shadcn
+   separates the parts with spacing, not rules, so there are no bands. */
+#lv .zc-card { display: flex; flex-direction: column; gap: 1.5rem; padding: 1.5rem 0;
+               background: var(--card); color: var(--card-foreground);
+               border: 1px solid var(--border); border-radius: var(--radius-xl);
+               box-shadow: var(--shadow-sm); overflow: hidden; }
+#lv .zc-card[data-size="sm"] { gap: 0.75rem; padding: 1rem 0; }
+#lv .zc-card-header { display: grid; grid-auto-rows: min-content; align-items: start;
+                      gap: 0.5rem; padding: 0 1.5rem; }
+/* the action sits in a second column, spanning the title and description
+   rows (shadcn uses has-data-[slot=card-action] for this) */
+#lv .zc-card-header:has(.zc-card-action) { grid-template-columns: 1fr auto; }
+#lv .zc-card[data-size="sm"] .zc-card-header,
+#lv .zc-card[data-size="sm"] .zc-card-content,
+#lv .zc-card[data-size="sm"] .zc-card-footer { padding: 0 1rem; }
+#lv .zc-card-title { font-size: 1rem; font-weight: 600; line-height: 1; }
+#lv .zc-card-desc { color: var(--muted-foreground); font-size: 0.875rem; }
+#lv .zc-card-action { grid-column-start: 2; grid-row: 1 / span 2; grid-row-start: 1;
+                      align-self: start; justify-self: end; }
+#lv .zc-card-content { padding: 0 1.5rem; }
+/* Keep the body padding even: a paragraph's own margin would otherwise stack
+   on top of (or below) the band's padding. */
+#lv .zc-card-content > :first-child { margin-top: 0; }
+#lv .zc-card-content > :last-child { margin-bottom: 0; }
+#lv .zc-card-footer { display: flex; align-items: center; gap: 0.5rem;
+                      padding: 0 1.5rem; }
+
+/* Separator: horizontal rule or vertical spacer in a flex row. */
+#lv .zc-sep { height: 1px; flex-shrink: 0; background: var(--border); margin: 0.75rem 0; }
+#lv .zc-sep:has(span) { height: auto; background: none; display: flex; align-items: center;
+                        gap: 0.6rem; color: var(--muted-foreground); font-size: 0.8rem; }
+#lv .zc-sep:has(span)::before, #lv .zc-sep:has(span)::after {
+  content: ""; flex: 1; height: 1px; background: var(--border); }
+#lv .zc-sep-vertical { width: 1px; height: auto; flex-shrink: 0; align-self: stretch;
+                       margin: 0 0.6rem; }

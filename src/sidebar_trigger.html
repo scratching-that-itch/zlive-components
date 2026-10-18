@@ -1,0 +1,14 @@
+@zig {
+const Icon = @import("icon.zig");
+}
+@props {
+    /// The event the trigger sends. The view that owns the sidebar state
+    /// handles it (the demo: `zc:sidebar:toggle`).
+    event: []const u8 = "zc:sidebar:toggle",
+    label: []const u8 = "Toggle sidebar",
+    class: ?[]const u8 = null,
+}
+<button type="button" class="btn zc-sidebar-trigger{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-trigger" data-sidebar="trigger" data-variant="ghost" data-size="icon" data-lv-click="{props.event}" aria-label="{props.label}" title="{props.label}">
+@Icon(.{ .name = .panel_left })
+<span class="sr-only">{props.label}</span>
+</button>

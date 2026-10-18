@@ -1,0 +1,6 @@
+@props {
+    event: []const u8 = "zc:sidebar:toggle",
+    label: []const u8 = "Toggle sidebar",
+    class: ?[]const u8 = null,
+}
+<button type="button" class="zc-sidebar-rail{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-rail" data-sidebar="rail" tabindex="-1" title="{props.label}" aria-label="{props.label}" data-lv-click="{props.event}"></button>

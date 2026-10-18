@@ -1,0 +1,34 @@
+@zig {
+pub const Cols = enum {
+    /// Fixed column counts (1-3).
+    one,
+    two,
+    three,
+    /// Responsive: one column until the breakpoint, then as many as fit,
+    /// minimum 14rem each. The dashboard default.
+    auto,
+
+    pub fn tag(self: Cols) []const u8 {
+        return @tagName(self);
+    }
+};
+
+pub const Gap = enum {
+    none,
+    sm,
+    md,
+    lg,
+
+    pub fn tag(self: Gap) []const u8 {
+        return @tagName(self);
+    }
+};
+}
+@props {
+    cols: Cols = .auto,
+    gap: Gap = .md,
+    children: []const Segment,
+}
+<div class="zc-grid zc-cols-{props.cols.tag()} zc-gap-{props.gap.tag()}">
+@children
+</div>

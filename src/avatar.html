@@ -1,0 +1,16 @@
+@props {
+    /// The image source. Null renders the fallback alone, which is what a
+    /// demo with no avatar files wants (and there is no client-side
+    /// image-error handling to fall back on).
+    src: ?[]const u8 = null,
+    /// Initials (or any short text) shown for the fallback.
+    fallback: []const u8,
+    /// Extra classes — the sidebar sizes it (`size-8 rounded-lg`).
+    class: ?[]const u8 = null,
+}
+<span class="zc-avatar{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="avatar">
+@if (props.src) |s| {
+<img class="zc-avatar-image" data-slot="avatar-image" src="{s}" alt="">
+}
+<span class="zc-avatar-fallback" data-slot="avatar-fallback">{props.fallback}</span>
+</span>

@@ -1,0 +1,12 @@
+@props {
+    /// The disclosure state of a nav item that has sub-items: `null` renders
+    /// no `data-state` at all (a plain row), and a nav item keeps its
+    /// attribute for its whole life, so opening and closing it is one
+    /// patched value.
+    open: ?bool = null,
+    class: ?[]const u8 = null,
+    children: []const Segment,
+}
+<li class="zc-sidebar-menu-item{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-menu-item" data-sidebar="menu-item"{if (props.open != null) " data-state=\"" else ""}{if (props.open) |o| if (o) "open" else "closed" else ""}{if (props.open != null) "\"" else ""}>
+@children
+</li>

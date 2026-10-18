@@ -1,0 +1,16 @@
+@props {
+    id: []const u8,
+    open: bool = false,
+    /// The trigger's markup (a Button, a SidebarMenuButton, anything).
+    trigger: []const Segment,
+    children: []const Segment,
+    class: ?[]const u8 = null,
+}
+<div class="zc-collapsible{if (props.class != null) " " else ""}{props.class orelse ""}" id="{props.id}" data-slot="collapsible" data-state="{if (props.open) "open" else "closed"}">
+<div class="zc-collapsible-trigger" data-slot="collapsible-trigger">
+@children (props.trigger)
+</div>
+<div class="zc-collapsible-content" data-slot="collapsible-content"><div class="zc-collapsible-inner">
+@children (props.children)
+</div></div>
+</div>

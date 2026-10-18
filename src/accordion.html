@@ -1,0 +1,27 @@
+@zig {
+pub const Section = struct {
+    key: []const u8,
+    title: []const u8,
+    content: []const Segment,
+};
+
+fn isOpen(open: []const []const u8, key: []const u8) bool {
+    for (open) |k| {
+        if (std.mem.eql(u8, k, key)) return true;
+    }
+    return false;
+}
+}
+@props {
+    id: []const u8,
+    sections: []const Section,
+    /// keys of the currently open sections (server state)
+    open: []const []const u8,
+}
+<div class="zc-acc" id="{props.id}">
+@for (props.sections) |section| {
+<div class="zc-acc-section" id="{props.id}-sec-{section.key}"><button type="button" class="zc-acc-header" id="{props.id}-head-{section.key}" data-lv-click="toggle_section" data-lv-value="{section.key}" aria-expanded="{if (isOpen(props.open, section.key)) "true" else "false"}">{section.title}</button><div class="zc-acc-body" id="{props.id}-body-{section.key}">
+@children (if (isOpen(props.open, section.key)) section.content else &.{})
+</div></div>
+}
+</div>

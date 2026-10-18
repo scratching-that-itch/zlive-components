@@ -1,0 +1,9 @@
+@zig {
+pub const Level = enum { info, success, err };
+}
+@props {
+    /// The banner text. The queue owns the copy it stores.
+    message: []const u8,
+    level: Level = .info,
+}
+<div class="flash flash-{@tagName(props.level)}" data-lv-hook="flash">{props.message}</div>

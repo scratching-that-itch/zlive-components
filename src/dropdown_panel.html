@@ -1,0 +1,42 @@
+@zig {
+const item_types = @import("dropdown_item.zig");
+const DropdownSub = @import("dropdown_sub.zig");
+
+pub const Variant = item_types.Variant;
+pub const Kind = item_types.Kind;
+pub const Item = item_types.Item;
+const subOpen = item_types.subOpen;
+}
+@props {
+    id: []const u8,
+    items: []const Item,
+    placement: []const u8 = "bottom-start",
+    /// The value of the submenu whose panel should render inline (open
+    /// state for kind = .sub rows), or null when every submenu is closed.
+    open_sub: ?[]const u8 = null,
+}
+<div class="zc-dropdown" id="{props.id}-panel" data-slot="dropdown-menu-content" data-lv-hook="zc-dropdown" data-zc-anchor="{props.id}" data-zc-placement="{props.placement}" role="menu">
+@for (props.items) |item| {
+@if (item.kind == .separator) {
+<div class="zc-dropdown-separator" data-slot="dropdown-menu-separator" role="separator"></div>
+}
+@if (item.kind == .label) {
+<div class="zc-dropdown-label{if (item.inset) " zc-dropdown-item-inset" else ""}" data-slot="dropdown-menu-label">{item.label}</div>
+}
+@if (item.kind == .item) {
+<button type="button" role="menuitem" data-slot="dropdown-menu-item" data-variant="{item.variant.tag()}" class="zc-dropdown-item{if (item.inset) " zc-dropdown-item-inset" else ""}"{if (item.disabled) " disabled data-disabled=\"true\"" else ""}{if (item.event != null) " data-lv-click=\"" else ""}{item.event orelse ""}{if (item.event != null) "\"" else ""}{if (item.value != null) " data-lv-value=\"" else ""}{item.value orelse ""}{if (item.value != null) "\"" else ""}>{item.label}{if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""}{item.shortcut orelse ""}{if (item.shortcut != null) "</span>" else ""}</button>
+}
+@if (item.kind == .checkbox) {
+<button type="button" role="menuitemcheckbox" aria-checked="{if (item.checked) "true" else "false"}" data-slot="dropdown-menu-checkbox-item" class="zc-dropdown-item zc-dropdown-item-check"{if (item.disabled) " disabled data-disabled=\"true\"" else ""}{if (item.event != null) " data-lv-click=\"" else ""}{item.event orelse ""}{if (item.event != null) "\"" else ""}{if (item.value != null) " data-lv-value=\"" else ""}{item.value orelse ""}{if (item.value != null) "\"" else ""}>{if (item.checked) "<span class=\"zc-dropdown-indicator\" data-slot=\"dropdown-menu-checkbox-item-indicator\">✓</span>" else ""}{item.label}{if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""}{item.shortcut orelse ""}{if (item.shortcut != null) "</span>" else ""}</button>
+}
+@if (item.kind == .radio) {
+<button type="button" role="menuitemradio" aria-checked="{if (item.checked) "true" else "false"}" data-slot="dropdown-menu-radio-item" class="zc-dropdown-item zc-dropdown-item-check"{if (item.disabled) " disabled data-disabled=\"true\"" else ""}{if (item.event != null) " data-lv-click=\"" else ""}{item.event orelse ""}{if (item.event != null) "\"" else ""}{if (item.value != null) " data-lv-value=\"" else ""}{item.value orelse ""}{if (item.value != null) "\"" else ""}>{if (item.checked) "<span class=\"zc-dropdown-indicator\" data-slot=\"dropdown-menu-radio-item-indicator\">•</span>" else ""}{item.label}{if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""}{item.shortcut orelse ""}{if (item.shortcut != null) "</span>" else ""}</button>
+}
+@if (item.kind == .sub) {
+<button type="button" role="menuitem" aria-haspopup="menu" aria-expanded="{if (subOpen(props.open_sub, item.value orelse "")) "true" else "false"}" data-slot="dropdown-menu-sub-trigger" class="zc-dropdown-item zc-dropdown-sub-trigger{if (item.inset) " zc-dropdown-item-inset" else ""}" id="{props.id}-sub-{item.value orelse ""}" data-lv-click="zc:dropdown:sub" data-lv-value="{item.value orelse ""}">{item.label}<span class="zc-dropdown-chevron" aria-hidden="true">›</span></button>
+@if (subOpen(props.open_sub, item.value orelse "")) {
+@DropdownSub(.{ .parent = props.id, .key = item.value orelse "", .items = item.sub })
+}
+}
+}
+</div>

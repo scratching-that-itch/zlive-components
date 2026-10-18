@@ -1,0 +1,4 @@
+@props {
+    class: ?[]const u8 = null,
+}
+<div class="zc-sep zc-sidebar-separator{if (props.class != null) " " else ""}{props.class orelse ""}" data-slot="sidebar-separator" data-sidebar="separator" role="separator" aria-orientation="horizontal"></div>
