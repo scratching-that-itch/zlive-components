@@ -55,7 +55,7 @@ test "dropdown: opening patches the trigger state and the panel" {
     defer patches.deinit();
     try std.testing.expectEqual(@as(usize, 2), patches.count());
     try std.testing.expectEqualStrings("0.23", patches.at(0).path);
-    try std.testing.expectEqualStrings(" aria-expanded=\"true\"", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings(" aria-expanded=\"true\"", patches.at(0).node.dynamic.html);
     try std.testing.expectEqualStrings("1", patches.at(1).path);
     try std.testing.expect(patches.at(1).node == .children);
 
@@ -63,7 +63,7 @@ test "dropdown: opening patches the trigger state and the panel" {
     defer patches2.deinit();
     const json = try patches2.toJson(a);
     try std.testing.expectEqualStrings(
-        "{\"0.23\":\" aria-expanded=\\\"false\\\"\",\"1\":[]}",
+        "{\"0.23\":{\"html\":\" aria-expanded=\\\"false\\\"\"},\"1\":[]}",
         json,
     );
 }
@@ -196,7 +196,7 @@ test "dropdown: a checkbox row toggle is one patch" {
     // emit data-state; keeping one carrier is what makes this a single
     // patch) plus the indicator span appearing.
     try std.testing.expectEqual(@as(usize, 2), patches.count());
-    try std.testing.expectEqualStrings("true", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings("true", patches.at(0).node.dynamic.html);
 }
 
 test "dropdown: selecting a radio row is two patches per changed row" {

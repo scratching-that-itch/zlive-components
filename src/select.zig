@@ -29,7 +29,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                 try _i0.append(allocator, .text("<option value=\""));
                 try _i0.append(allocator, .of(opt.value));
                 try _i0.append(allocator, .text("\""));
-                try _i0.append(allocator, .of(if (opt.value.len != 0 and std.mem.eql(u8, opt.value, props.value)) " selected" else ""));
+                try _i0.append(allocator, .html(if (opt.value.len != 0 and std.mem.eql(u8, opt.value, props.value)) " selected" else ""));
                 try _i0.append(allocator, .text(">"));
                 try _i0.append(allocator, .of(opt.label));
                 try _i0.append(allocator, .text("</option>"));

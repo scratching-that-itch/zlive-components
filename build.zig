@@ -20,6 +20,9 @@ pub const template_files = [_][]const u8{
     "src/dropdown_sub.html",
     "src/popover.html",
     "src/tooltip.html",
+    // Chart: an ECharts host. The element is rendered empty and marked
+    // data-lv-ignore; the spec JSON rides the data-lv-chart attribute.
+    "src/chart.html",
     // Icons, the sidebar primitive set, avatar, breadcrumb, collapsible.
     "src/avatar.html",
     "src/breadcrumb.html",

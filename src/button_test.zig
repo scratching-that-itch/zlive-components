@@ -102,7 +102,7 @@ test "button diff: only disabled toggles -> one patch" {
 
     try std.testing.expectEqual(@as(usize, 1), patches.count());
     try std.testing.expectEqualStrings("13", patches.at(0).path);
-    try std.testing.expectEqualStrings(" disabled", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings(" disabled", patches.at(0).node.dynamic.html);
 }
 
 test "button diff: only the variant changes -> one patch" {
@@ -202,7 +202,7 @@ test "button render: anchored disclosure trigger, expanded" {
     try std.testing.expectEqual(@as(usize, 1), patches.count());
     try std.testing.expectEqualStrings(
         " aria-expanded=\"false\"",
-        patches.at(0).node.dynamic.string,
+        patches.at(0).node.dynamic.html,
     );
 }
 

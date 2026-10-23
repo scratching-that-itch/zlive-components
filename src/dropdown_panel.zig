@@ -47,7 +47,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                     var _b2: std.ArrayListUnmanaged(Segment) = .empty;
                     if (item.kind == .label) {
                         try _b2.append(allocator, .text("<div class=\"zc-dropdown-label"));
-                        try _b2.append(allocator, .of(if (item.inset) " zc-dropdown-item-inset" else ""));
+                        try _b2.append(allocator, .html(if (item.inset) " zc-dropdown-item-inset" else ""));
                         try _b2.append(allocator, .text("\" data-slot=\"dropdown-menu-label\">"));
                         try _b2.append(allocator, .of(item.label));
                         try _b2.append(allocator, .text("</div>"));
@@ -60,20 +60,20 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                         try _b3.append(allocator, .text("<button type=\"button\" role=\"menuitem\" data-slot=\"dropdown-menu-item\" data-variant=\""));
                         try _b3.append(allocator, .of(item.variant.tag()));
                         try _b3.append(allocator, .text("\" class=\"zc-dropdown-item"));
-                        try _b3.append(allocator, .of(if (item.inset) " zc-dropdown-item-inset" else ""));
+                        try _b3.append(allocator, .html(if (item.inset) " zc-dropdown-item-inset" else ""));
                         try _b3.append(allocator, .text("\""));
-                        try _b3.append(allocator, .of(if (item.disabled) " disabled data-disabled=\"true\"" else ""));
-                        try _b3.append(allocator, .of(if (item.event != null) " data-lv-click=\"" else ""));
+                        try _b3.append(allocator, .html(if (item.disabled) " disabled data-disabled=\"true\"" else ""));
+                        try _b3.append(allocator, .html(if (item.event != null) " data-lv-click=\"" else ""));
                         try _b3.append(allocator, .of(item.event orelse ""));
-                        try _b3.append(allocator, .of(if (item.event != null) "\"" else ""));
-                        try _b3.append(allocator, .of(if (item.value != null) " data-lv-value=\"" else ""));
+                        try _b3.append(allocator, .html(if (item.event != null) "\"" else ""));
+                        try _b3.append(allocator, .html(if (item.value != null) " data-lv-value=\"" else ""));
                         try _b3.append(allocator, .of(item.value orelse ""));
-                        try _b3.append(allocator, .of(if (item.value != null) "\"" else ""));
+                        try _b3.append(allocator, .html(if (item.value != null) "\"" else ""));
                         try _b3.append(allocator, .text(">"));
                         try _b3.append(allocator, .of(item.label));
-                        try _b3.append(allocator, .of(if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""));
+                        try _b3.append(allocator, .html(if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""));
                         try _b3.append(allocator, .of(item.shortcut orelse ""));
-                        try _b3.append(allocator, .of(if (item.shortcut != null) "</span>" else ""));
+                        try _b3.append(allocator, .html(if (item.shortcut != null) "</span>" else ""));
                         try _b3.append(allocator, .text("</button>"));
                     }
                     try _i0.append(allocator, .{ .children = try _b3.toOwnedSlice(allocator) });
@@ -82,21 +82,21 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                     var _b4: std.ArrayListUnmanaged(Segment) = .empty;
                     if (item.kind == .checkbox) {
                         try _b4.append(allocator, .text("<button type=\"button\" role=\"menuitemcheckbox\" aria-checked=\""));
-                        try _b4.append(allocator, .of(if (item.checked) "true" else "false"));
+                        try _b4.append(allocator, .html(if (item.checked) "true" else "false"));
                         try _b4.append(allocator, .text("\" data-slot=\"dropdown-menu-checkbox-item\" class=\"zc-dropdown-item zc-dropdown-item-check\""));
-                        try _b4.append(allocator, .of(if (item.disabled) " disabled data-disabled=\"true\"" else ""));
-                        try _b4.append(allocator, .of(if (item.event != null) " data-lv-click=\"" else ""));
+                        try _b4.append(allocator, .html(if (item.disabled) " disabled data-disabled=\"true\"" else ""));
+                        try _b4.append(allocator, .html(if (item.event != null) " data-lv-click=\"" else ""));
                         try _b4.append(allocator, .of(item.event orelse ""));
-                        try _b4.append(allocator, .of(if (item.event != null) "\"" else ""));
-                        try _b4.append(allocator, .of(if (item.value != null) " data-lv-value=\"" else ""));
+                        try _b4.append(allocator, .html(if (item.event != null) "\"" else ""));
+                        try _b4.append(allocator, .html(if (item.value != null) " data-lv-value=\"" else ""));
                         try _b4.append(allocator, .of(item.value orelse ""));
-                        try _b4.append(allocator, .of(if (item.value != null) "\"" else ""));
+                        try _b4.append(allocator, .html(if (item.value != null) "\"" else ""));
                         try _b4.append(allocator, .text(">"));
-                        try _b4.append(allocator, .of(if (item.checked) "<span class=\"zc-dropdown-indicator\" data-slot=\"dropdown-menu-checkbox-item-indicator\">✓</span>" else ""));
+                        try _b4.append(allocator, .html(if (item.checked) "<span class=\"zc-dropdown-indicator\" data-slot=\"dropdown-menu-checkbox-item-indicator\">✓</span>" else ""));
                         try _b4.append(allocator, .of(item.label));
-                        try _b4.append(allocator, .of(if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""));
+                        try _b4.append(allocator, .html(if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""));
                         try _b4.append(allocator, .of(item.shortcut orelse ""));
-                        try _b4.append(allocator, .of(if (item.shortcut != null) "</span>" else ""));
+                        try _b4.append(allocator, .html(if (item.shortcut != null) "</span>" else ""));
                         try _b4.append(allocator, .text("</button>"));
                     }
                     try _i0.append(allocator, .{ .children = try _b4.toOwnedSlice(allocator) });
@@ -105,21 +105,21 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                     var _b5: std.ArrayListUnmanaged(Segment) = .empty;
                     if (item.kind == .radio) {
                         try _b5.append(allocator, .text("<button type=\"button\" role=\"menuitemradio\" aria-checked=\""));
-                        try _b5.append(allocator, .of(if (item.checked) "true" else "false"));
+                        try _b5.append(allocator, .html(if (item.checked) "true" else "false"));
                         try _b5.append(allocator, .text("\" data-slot=\"dropdown-menu-radio-item\" class=\"zc-dropdown-item zc-dropdown-item-check\""));
-                        try _b5.append(allocator, .of(if (item.disabled) " disabled data-disabled=\"true\"" else ""));
-                        try _b5.append(allocator, .of(if (item.event != null) " data-lv-click=\"" else ""));
+                        try _b5.append(allocator, .html(if (item.disabled) " disabled data-disabled=\"true\"" else ""));
+                        try _b5.append(allocator, .html(if (item.event != null) " data-lv-click=\"" else ""));
                         try _b5.append(allocator, .of(item.event orelse ""));
-                        try _b5.append(allocator, .of(if (item.event != null) "\"" else ""));
-                        try _b5.append(allocator, .of(if (item.value != null) " data-lv-value=\"" else ""));
+                        try _b5.append(allocator, .html(if (item.event != null) "\"" else ""));
+                        try _b5.append(allocator, .html(if (item.value != null) " data-lv-value=\"" else ""));
                         try _b5.append(allocator, .of(item.value orelse ""));
-                        try _b5.append(allocator, .of(if (item.value != null) "\"" else ""));
+                        try _b5.append(allocator, .html(if (item.value != null) "\"" else ""));
                         try _b5.append(allocator, .text(">"));
-                        try _b5.append(allocator, .of(if (item.checked) "<span class=\"zc-dropdown-indicator\" data-slot=\"dropdown-menu-radio-item-indicator\">•</span>" else ""));
+                        try _b5.append(allocator, .html(if (item.checked) "<span class=\"zc-dropdown-indicator\" data-slot=\"dropdown-menu-radio-item-indicator\">•</span>" else ""));
                         try _b5.append(allocator, .of(item.label));
-                        try _b5.append(allocator, .of(if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""));
+                        try _b5.append(allocator, .html(if (item.shortcut != null) " <span class=\"zc-dropdown-shortcut\" data-slot=\"dropdown-menu-shortcut\">" else ""));
                         try _b5.append(allocator, .of(item.shortcut orelse ""));
-                        try _b5.append(allocator, .of(if (item.shortcut != null) "</span>" else ""));
+                        try _b5.append(allocator, .html(if (item.shortcut != null) "</span>" else ""));
                         try _b5.append(allocator, .text("</button>"));
                     }
                     try _i0.append(allocator, .{ .children = try _b5.toOwnedSlice(allocator) });
@@ -128,9 +128,9 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                     var _b6: std.ArrayListUnmanaged(Segment) = .empty;
                     if (item.kind == .sub) {
                         try _b6.append(allocator, .text("<button type=\"button\" role=\"menuitem\" aria-haspopup=\"menu\" aria-expanded=\""));
-                        try _b6.append(allocator, .of(if (subOpen(props.open_sub, item.value orelse "")) "true" else "false"));
+                        try _b6.append(allocator, .html(if (subOpen(props.open_sub, item.value orelse "")) "true" else "false"));
                         try _b6.append(allocator, .text("\" data-slot=\"dropdown-menu-sub-trigger\" class=\"zc-dropdown-item zc-dropdown-sub-trigger"));
-                        try _b6.append(allocator, .of(if (item.inset) " zc-dropdown-item-inset" else ""));
+                        try _b6.append(allocator, .html(if (item.inset) " zc-dropdown-item-inset" else ""));
                         try _b6.append(allocator, .text("\" id=\""));
                         try _b6.append(allocator, .of(props.id));
                         try _b6.append(allocator, .text("-sub-"));

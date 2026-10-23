@@ -15,7 +15,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     try _segs.append(allocator, .text("<form id=\""));
     try _segs.append(allocator, .of(props.id));
     try _segs.append(allocator, .text("\""));
-    try _segs.append(allocator, .of(if (props.submitting) " data-submitting" else ""));
+    try _segs.append(allocator, .html(if (props.submitting) " data-submitting" else ""));
     try _segs.append(allocator, .text(">"));
     try _segs.append(allocator, .{ .children = props.children });
     try _segs.append(allocator, .text("</form>"));

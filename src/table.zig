@@ -43,7 +43,9 @@ pub const Table = Component(struct {
 
     pub const Props = struct {
         columns: []const Column,
-        /// rows[r][c] is the cell value for row r, column c
+        /// rows[r][c] is the cell value for row r, column c. String cells
+        /// render as escaped text; a cell that is markup by construction
+        /// uses the explicit opt-in `Scalar.html`.
         rows: []const []const Scalar,
         empty: []const u8 = "No rows.",
         /// optional stable ids for the <tr> elements: morphdom matches by

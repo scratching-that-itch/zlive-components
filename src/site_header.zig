@@ -18,10 +18,10 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<header class=\"zc-site-header"));
-    try _segs.append(allocator, .of(if (props.class != null) " " else ""));
+    try _segs.append(allocator, .html(if (props.class != null) " " else ""));
     try _segs.append(allocator, .of(props.class orelse ""));
     try _segs.append(allocator, .text("\" data-slot=\"site-header\" data-sticky=\""));
-    try _segs.append(allocator, .of(if (props.sticky) "true" else "false"));
+    try _segs.append(allocator, .html(if (props.sticky) "true" else "false"));
     try _segs.append(allocator, .text("\"><div class=\"zc-site-header-bar\" data-slot=\"site-header-bar\">"));
     try _segs.append(allocator, .{ .children = props.children });
     try _segs.append(allocator, .text("</div></header>"));

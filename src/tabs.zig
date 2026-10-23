@@ -41,7 +41,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                 try _i0.append(allocator, .text("\" data-lv-click=\"switch_tab\" data-lv-value=\""));
                 try _i0.append(allocator, .of(tab.key));
                 try _i0.append(allocator, .text("\""));
-                try _i0.append(allocator, .of(if (std.mem.eql(u8, tab.key, props.active)) " active" else ""));
+                try _i0.append(allocator, .html(if (std.mem.eql(u8, tab.key, props.active)) " active" else ""));
                 try _i0.append(allocator, .text(">"));
                 try _i0.append(allocator, .of(tab.label));
                 try _i0.append(allocator, .text("</button>"));

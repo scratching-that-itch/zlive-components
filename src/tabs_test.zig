@@ -112,7 +112,7 @@ test "accordion: toggling a section is exactly two patches" {
     }.lt);
     try std.testing.expectEqualStrings("3.1.11", paths[0]);
     try std.testing.expectEqualStrings("3.1.19", paths[1]);
-    try std.testing.expectEqualStrings("true", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings("true", patches.at(0).node.dynamic.html);
 }
 
 test "accordion: zero hooks and closed bodies render empty" {

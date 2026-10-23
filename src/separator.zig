@@ -27,12 +27,12 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
         var _b0: std.ArrayListUnmanaged(Segment) = .empty;
         if (props.orientation == .vertical) {
             try _b0.append(allocator, .text("<div class=\"zc-sep zc-sep-vertical"));
-            try _b0.append(allocator, .of(if (props.class != null) " " else ""));
+            try _b0.append(allocator, .html(if (props.class != null) " " else ""));
             try _b0.append(allocator, .of(props.class orelse ""));
             try _b0.append(allocator, .text("\" role=\"separator\" aria-orientation=\"vertical\"></div>"));
         } else {
             try _b0.append(allocator, .text("<div class=\"zc-sep"));
-            try _b0.append(allocator, .of(if (props.class != null) " " else ""));
+            try _b0.append(allocator, .html(if (props.class != null) " " else ""));
             try _b0.append(allocator, .of(props.class orelse ""));
             try _b0.append(allocator, .text("\" role=\"separator\" aria-orientation=\"horizontal\">"));
             {

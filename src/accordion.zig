@@ -46,7 +46,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
                 try _i0.append(allocator, .text("\" data-lv-click=\"toggle_section\" data-lv-value=\""));
                 try _i0.append(allocator, .of(section.key));
                 try _i0.append(allocator, .text("\" aria-expanded=\""));
-                try _i0.append(allocator, .of(if (isOpen(props.open, section.key)) "true" else "false"));
+                try _i0.append(allocator, .html(if (isOpen(props.open, section.key)) "true" else "false"));
                 try _i0.append(allocator, .text("\">"));
                 try _i0.append(allocator, .of(section.title));
                 try _i0.append(allocator, .text("</button><div class=\"zc-acc-body\" id=\""));

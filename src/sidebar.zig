@@ -12,7 +12,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<div class=\"zc-sidebar\" data-slot=\"sidebar\"><div class=\"zc-sidebar-gap\" data-slot=\"sidebar-gap\"></div><div class=\"zc-sidebar-container"));
-    try _segs.append(allocator, .of(if (props.class != null) " " else ""));
+    try _segs.append(allocator, .html(if (props.class != null) " " else ""));
     try _segs.append(allocator, .of(props.class orelse ""));
     try _segs.append(allocator, .text("\" data-slot=\"sidebar-container\"><div class=\"zc-sidebar-inner\" data-slot=\"sidebar-inner\" data-sidebar=\"sidebar\">"));
     try _segs.append(allocator, .{ .children = props.children });

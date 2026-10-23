@@ -40,10 +40,10 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     try _segs.append(allocator, .text("<div class=\"zc-card\" data-slot=\"card\" data-size=\""));
     try _segs.append(allocator, .of(props.size.tag()));
     try _segs.append(allocator, .text("\""));
-    try _segs.append(allocator, .of(if (props.id != null) " id=\"" else ""));
+    try _segs.append(allocator, .html(if (props.id != null) " id=\"" else ""));
     try _segs.append(allocator, .of(props.id orelse ""));
-    try _segs.append(allocator, .of(if (props.id != null) "\"" else ""));
-    try _segs.append(allocator, .of(if (props.live) " aria-live=\"polite\"" else ""));
+    try _segs.append(allocator, .html(if (props.id != null) "\"" else ""));
+    try _segs.append(allocator, .html(if (props.live) " aria-live=\"polite\"" else ""));
     try _segs.append(allocator, .text(">"));
     {
         var _b0: std.ArrayListUnmanaged(Segment) = .empty;

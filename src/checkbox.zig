@@ -18,7 +18,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     try _segs.append(allocator, .text("\" name=\""));
     try _segs.append(allocator, .of(props.id));
     try _segs.append(allocator, .text("\""));
-    try _segs.append(allocator, .of(if (props.checked) " checked" else ""));
+    try _segs.append(allocator, .html(if (props.checked) " checked" else ""));
     try _segs.append(allocator, .text(" data-lv-change=\"input\"><label for=\""));
     try _segs.append(allocator, .of(props.id));
     try _segs.append(allocator, .text("\">"));

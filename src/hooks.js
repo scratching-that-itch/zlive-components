@@ -260,4 +260,49 @@ LiveHooks.register('zc-tooltip', {
     zcState.delete(el);
   },
 });
+
+// ---------------------------------------------------------------------
+// Chart — Apache ECharts (loaded via CDN as window.echarts) hosted in a
+// client-owned container.
+//
+// The server owns the spec; the hook owns the canvas. The element is
+// rendered empty with the ECharts option JSON in data-lv-chart and
+// data-lv-ignore set, so morphdom updates the attribute (firing updated)
+// but never touches the DOM ECharts drew. updated() re-applies the spec;
+// ECharts diffs it internally, so a data-only change animates in place.
+// ---------------------------------------------------------------------
+LiveHooks.register('zc-chart', {
+  mounted(el) {
+    if (!window.echarts) {
+      console.error('[zc] zc-chart: window.echarts missing; load echarts before hooks.js runs a chart page');
+      return;
+    }
+    let spec;
+    try {
+      spec = JSON.parse(el.getAttribute('data-lv-chart'));
+    } catch {
+      console.error('[zc] zc-chart: data-lv-chart is not valid JSON');
+      return;
+    }
+    const chart = window.echarts.init(el);
+    chart.setOption(spec);
+    const onResize = () => chart.resize();
+    window.addEventListener('resize', onResize);
+    zcState.set(el, { chart, onResize });
+  },
+  updated(el) {
+    const s = zcState.get(el);
+    if (!s) return;
+    try {
+      s.chart.setOption(JSON.parse(el.getAttribute('data-lv-chart')));
+    } catch { /* a transient bad spec leaves the previous chart up */ }
+  },
+  destroyed(el) {
+    const s = zcState.get(el);
+    if (!s) return;
+    window.removeEventListener('resize', s.onResize);
+    s.chart.dispose();
+    zcState.delete(el);
+  },
+});
 })();

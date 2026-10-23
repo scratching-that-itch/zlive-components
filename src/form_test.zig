@@ -82,7 +82,7 @@ test "checkbox: toggle patches only the checked slot" {
     defer patches.deinit();
     try std.testing.expectEqual(@as(usize, 1), patches.count());
     try std.testing.expectEqualStrings("5", patches.at(0).path);
-    try std.testing.expectEqualStrings(" checked", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings(" checked", patches.at(0).node.dynamic.html);
 }
 
 test "form: wraps children and renders the submitting attribute" {
@@ -113,7 +113,7 @@ test "submit button: server-side loading state patches the button" {
     // node renderChild allocates at root index 0: disabled is slot 13,
     // the label is slot 28 (see button.html's attribute order).
     try std.testing.expectEqualStrings("0.13", patches.at(0).path);
-    try std.testing.expectEqualStrings(" disabled", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings(" disabled", patches.at(0).node.dynamic.html);
     try std.testing.expectEqualStrings("0.28", patches.at(1).path);
     try std.testing.expectEqualStrings("Saving…", patches.at(1).node.dynamic.string);
 }

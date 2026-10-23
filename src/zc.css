@@ -1275,6 +1275,11 @@ body { font-family: system-ui, sans-serif; max-width: 60rem; margin: 2rem auto; 
 #lv .zc-acc-header[aria-expanded="true"] { font-weight: 600; }
 #lv .zc-acc-body { padding: 0 0.2rem 0.8rem; color: var(--foreground); opacity: 0.85; }
 
+/* --- Chart (ECharts host) ------------------------------------------------- */
+/* The hook draws the canvas; CSS only gives the box a size. The height comes
+   from the `height` prop (inline style), this is just the width. */
+#lv .zc-chart { display: block; width: 100%; }
+
 /* --- Dialog --------------------------------------------------------------- */
 #lv .zc-dialog { position: fixed; inset: 0; z-index: 20; }
 #lv .zc-dialog-backdrop { position: absolute; inset: 0; background: rgb(0 0 0 / 0.5); }

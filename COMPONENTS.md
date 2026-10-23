@@ -570,6 +570,19 @@ rows are typed by `kind`.
   toggles visibility client-side; no server roundtrip, no state.
 - **Hook**: positions with Floating UI on show.
 
+## Chart — hook `zc-chart`
+
+- **Props**: `id`, `spec` (the Apache ECharts option, serialized to JSON by
+  the view), `height` (default `320px`)
+- **Events**: **none** — the chart is output-only.
+- **Hook**: `echarts.init` on mount, `setOption(spec)` on `updated`,
+  `dispose` on `destroyed`; a window-resize listener calls `chart.resize()`.
+- **Client-owned subtree**: the element carries `data-lv-ignore`, so
+  morphdom morphs its attributes (a spec change is exactly the
+  `data-lv-chart` slot — one patch) but never touches the canvas ECharts
+  drew inside. ECharts is loaded by the page via CDN (`window.echarts`),
+  like Floating UI; the server owns the spec, the hook owns the canvas.
+
 ## JavaScript model & multiple instances
 
 **Two files, two responsibilities** (`client.js` in zlive, `src/hooks.js` here):

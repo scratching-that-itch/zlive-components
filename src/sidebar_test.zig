@@ -62,7 +62,7 @@ test "collapsing the sidebar is one patched slot" {
     // The headline property: the whole layout is one attribute, so a collapse
     // costs exactly one patch however much CSS hangs off it.
     try std.testing.expectEqual(@as(usize, 1), patches.count());
-    try std.testing.expectEqualStrings("collapsed", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings("collapsed", patches.at(0).node.dynamic.html);
 }
 
 test "side, variant and collapse mode are one patched slot each" {
@@ -136,7 +136,7 @@ test "a nav row's disclosure is one patched value; a plain row has none" {
     // The attribute is present for the row's whole life, so only its value
     // changes — which is what keeps a nav click to a handful of slots.
     try std.testing.expectEqual(@as(usize, 1), patches.count());
-    try std.testing.expectEqualStrings("open", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings("open", patches.at(0).node.dynamic.html);
 
     // No state at all is a plain row: shadcn only puts data-state on a
     // Collapsible, and an empty attribute would be one more slot to patch.
@@ -371,7 +371,7 @@ test "the site header owns its frame and its sticky option" {
     var patches = try diff(a, still, moving);
     defer patches.deinit();
     try std.testing.expectEqual(@as(usize, 1), patches.count());
-    try std.testing.expectEqualStrings("true", patches.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings("true", patches.at(0).node.dynamic.html);
 }
 
 test "the layout composes the frame and puts the header in the inset" {
@@ -417,14 +417,14 @@ test "each layout option is one patched attribute" {
     var mini = try diff(a, rail, hidden);
     defer mini.deinit();
     try std.testing.expectEqual(@as(usize, 1), mini.count());
-    try std.testing.expectEqualStrings("offcanvas", mini.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings("offcanvas", mini.at(0).node.dynamic.html);
 
     const still = try Layout.render(a, .{ .sticky_header = false, .header = &.{}, .sidebar = &.{}, .content = &.{} });
     const sticky = try Layout.render(a, .{ .sticky_header = true, .header = &.{}, .sidebar = &.{}, .content = &.{} });
     var header = try diff(a, still, sticky);
     defer header.deinit();
     try std.testing.expectEqual(@as(usize, 1), header.count());
-    try std.testing.expectEqualStrings("true", header.at(0).node.dynamic.string);
+    try std.testing.expectEqualStrings("true", header.at(0).node.dynamic.html);
 }
 
 test "a full-width header sits above the sidebar and is always sticky" {

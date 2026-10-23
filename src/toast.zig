@@ -36,13 +36,13 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<div class=\"zc-toast\""));
-    try _segs.append(allocator, .of(if (props.id != null) " id=\"zc-toast-" else ""));
+    try _segs.append(allocator, .html(if (props.id != null) " id=\"zc-toast-" else ""));
     try _segs.append(allocator, .of(props.id orelse ""));
-    try _segs.append(allocator, .of(if (props.id != null) "\"" else ""));
+    try _segs.append(allocator, .html(if (props.id != null) "\"" else ""));
     try _segs.append(allocator, .text(" data-slot=\"toast\" data-level=\""));
     try _segs.append(allocator, .of(@tagName(props.level)));
     try _segs.append(allocator, .text("\" role=\""));
-    try _segs.append(allocator, .of(if (props.level == .err) "alert" else "status"));
+    try _segs.append(allocator, .html(if (props.level == .err) "alert" else "status"));
     try _segs.append(allocator, .text("\" aria-live=\"polite\">"));
     {
         var _b0: std.ArrayListUnmanaged(Segment) = .empty;

@@ -19,7 +19,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     try _segs.append(allocator, .text("\" data-lv-click=\"zc:popover:toggle\" data-lv-value=\""));
     try _segs.append(allocator, .of(props.id));
     try _segs.append(allocator, .text("\" aria-expanded=\""));
-    try _segs.append(allocator, .of(if (props.open) "true" else "false"));
+    try _segs.append(allocator, .html(if (props.open) "true" else "false"));
     try _segs.append(allocator, .text("\">"));
     try _segs.append(allocator, .of(props.label));
     try _segs.append(allocator, .text("</button>"));

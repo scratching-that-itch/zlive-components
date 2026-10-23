@@ -1,0 +1,11 @@
+@props {
+    /// element id (the hook keys instance state on the element; the id is
+    /// for debugging, CSS and tests)
+    id: []const u8,
+    /// the Apache ECharts option, serialized to JSON by the view — the
+    /// server owns the spec, the hook owns the canvas
+    spec: []const u8,
+    /// chart height; ECharts sizes the canvas to the element
+    height: []const u8 = "320px",
+}
+<div class="zc-chart" id="{props.id}" data-lv-hook="zc-chart" data-lv-ignore data-lv-chart="{props.spec}" style="height:{props.height}"></div>

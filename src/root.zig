@@ -27,6 +27,10 @@ pub const Dropdown = zlive.Component(@import("dropdown.zig"));
 pub const DropdownPanel = zlive.Component(@import("dropdown_panel.zig"));
 pub const Popover = zlive.Component(@import("popover.zig"));
 pub const Tooltip = zlive.Component(@import("tooltip.zig"));
+// Chart: an Apache ECharts host. The server owns the option JSON (the
+// `spec` prop); the zc-chart hook owns the canvas, which is why the
+// element is marked data-lv-ignore.
+pub const Chart = zlive.Component(@import("chart.zig"));
 pub const Table = @import("table.zig").Table;
 
 // Icons: lucide's shapes, inlined (no runtime fetch, no icon font).
@@ -85,8 +89,8 @@ pub const Container = zlive.Component(@import("container.zig"));
 pub const Separator = zlive.Component(@import("separator.zig"));
 
 /// The component hooks (zc-dialog, zc-dropdown, zc-popover, zc-tooltip,
-/// flash) and the component stylesheet, embedded so consumers can serve
-/// them without depending on their working directory.
+/// zc-chart, flash) and the component stylesheet, embedded so consumers can
+/// serve them without depending on their working directory.
 /// shadcn's theme registry (base colors + accents), generated from the
 /// shadcn-ui/ui source by scripts/gen_themes.py — see src/themes.zig.
 pub const themes = @import("themes.zig");
@@ -101,6 +105,7 @@ test {
     _ = @import("toast_test.zig");
     _ = @import("form_test.zig");
     _ = @import("dialog_test.zig");
+    _ = @import("chart_test.zig");
     _ = @import("tabs_test.zig");
     _ = @import("overlays_test.zig");
     _ = @import("layout_test.zig");

@@ -17,12 +17,12 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<li class=\"zc-sidebar-menu-item"));
-    try _segs.append(allocator, .of(if (props.class != null) " " else ""));
+    try _segs.append(allocator, .html(if (props.class != null) " " else ""));
     try _segs.append(allocator, .of(props.class orelse ""));
     try _segs.append(allocator, .text("\" data-slot=\"sidebar-menu-item\" data-sidebar=\"menu-item\""));
-    try _segs.append(allocator, .of(if (props.open != null) " data-state=\"" else ""));
-    try _segs.append(allocator, .of(if (props.open) |o| if (o) "open" else "closed" else ""));
-    try _segs.append(allocator, .of(if (props.open != null) "\"" else ""));
+    try _segs.append(allocator, .html(if (props.open != null) " data-state=\"" else ""));
+    try _segs.append(allocator, .html(if (props.open) |o| if (o) "open" else "closed" else ""));
+    try _segs.append(allocator, .html(if (props.open != null) "\"" else ""));
     try _segs.append(allocator, .text(">"));
     try _segs.append(allocator, .{ .children = props.children });
     try _segs.append(allocator, .text("</li>"));

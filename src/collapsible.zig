@@ -16,12 +16,12 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<div class=\"zc-collapsible"));
-    try _segs.append(allocator, .of(if (props.class != null) " " else ""));
+    try _segs.append(allocator, .html(if (props.class != null) " " else ""));
     try _segs.append(allocator, .of(props.class orelse ""));
     try _segs.append(allocator, .text("\" id=\""));
     try _segs.append(allocator, .of(props.id));
     try _segs.append(allocator, .text("\" data-slot=\"collapsible\" data-state=\""));
-    try _segs.append(allocator, .of(if (props.open) "open" else "closed"));
+    try _segs.append(allocator, .html(if (props.open) "open" else "closed"));
     try _segs.append(allocator, .text("\"><div class=\"zc-collapsible-trigger\" data-slot=\"collapsible-trigger\">"));
     try _segs.append(allocator, .{ .children = (props.trigger) });
     try _segs.append(allocator, .text("</div><div class=\"zc-collapsible-content\" data-slot=\"collapsible-content\"><div class=\"zc-collapsible-inner\">"));

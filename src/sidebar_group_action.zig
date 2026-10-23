@@ -19,14 +19,14 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<button type=\"button\" class=\"zc-sidebar-group-action"));
-    try _segs.append(allocator, .of(if (props.class != null) " " else ""));
+    try _segs.append(allocator, .html(if (props.class != null) " " else ""));
     try _segs.append(allocator, .of(props.class orelse ""));
     try _segs.append(allocator, .text("\" data-slot=\"sidebar-group-action\" data-sidebar=\"group-action\" data-lv-click=\""));
     try _segs.append(allocator, .of(props.event));
     try _segs.append(allocator, .text("\""));
-    try _segs.append(allocator, .of(if (props.value != null) " data-lv-value=\"" else ""));
+    try _segs.append(allocator, .html(if (props.value != null) " data-lv-value=\"" else ""));
     try _segs.append(allocator, .of(props.value orelse ""));
-    try _segs.append(allocator, .of(if (props.value != null) "\"" else ""));
+    try _segs.append(allocator, .html(if (props.value != null) "\"" else ""));
     try _segs.append(allocator, .text(" aria-label=\""));
     try _segs.append(allocator, .of(props.label));
     try _segs.append(allocator, .text("\" title=\""));

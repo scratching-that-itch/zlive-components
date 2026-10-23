@@ -81,10 +81,10 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<div class=\"zc-sidebar-wrapper"));
-    try _segs.append(allocator, .of(if (props.class != null) " " else ""));
+    try _segs.append(allocator, .html(if (props.class != null) " " else ""));
     try _segs.append(allocator, .of(props.class orelse ""));
     try _segs.append(allocator, .text("\" data-slot=\"sidebar-wrapper\" data-lv-hook=\"zc-sidebar\" data-state=\""));
-    try _segs.append(allocator, .of(if (props.open) "expanded" else "collapsed"));
+    try _segs.append(allocator, .html(if (props.open) "expanded" else "collapsed"));
     try _segs.append(allocator, .text("\" data-side=\""));
     try _segs.append(allocator, .of(props.side.tag()));
     try _segs.append(allocator, .text("\" data-variant=\""));

@@ -26,7 +26,7 @@ pub fn render(allocator: std.mem.Allocator, props: Props) ![]Segment {
     var _segs: std.ArrayListUnmanaged(Segment) = .empty;
     errdefer _segs.deinit(allocator);
     try _segs.append(allocator, .text("<nav class=\"zc-breadcrumb"));
-    try _segs.append(allocator, .of(if (props.class != null) " " else ""));
+    try _segs.append(allocator, .html(if (props.class != null) " " else ""));
     try _segs.append(allocator, .of(props.class orelse ""));
     try _segs.append(allocator, .text("\" data-slot=\"breadcrumb\" aria-label=\"breadcrumb\"><ol class=\"zc-breadcrumb-list\" data-slot=\"breadcrumb-list\">"));
     {
